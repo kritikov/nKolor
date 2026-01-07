@@ -1,0 +1,57 @@
+/* Γενικό window */
+window {
+    background-color: #f2f2f2;
+}
+
+.main-window{
+    margin: 15px;
+}
+
+.history_bar{
+    margin: 8px;
+}
+.history_bar box {
+    padding-bottom: 14px;
+}
+
+.pick-button {
+    background: none;
+    border: 1px solid #642727;
+    border-radius: 5px;
+    box-shadow: none;
+    padding: 0;
+    min-width: 100px;
+    min-height: 40px;
+}
+
+
+
+.icon-button:hover {
+    background: none;
+}
+.icon-button:active {
+    background: none;
+}
+
+/* Rows (HEX / RGB / HSL) */
+.value-bar {
+    padding: 0px;
+}
+
+/* Τίτλοι HEX / RGB / HSL */
+.value-title {
+    font-weight: bold;
+}
+
+/* Τιμές */
+.value-text {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.value-text:focus {
+    outline: none;
+}
+
+
