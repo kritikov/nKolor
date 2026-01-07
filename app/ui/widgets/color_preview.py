@@ -19,7 +19,7 @@ class ColorPreview(Gtk.Box):
 
 
     def build_ui(self):
-        self.preview = ColorView(50, 50, self.color, ColorViewType.SQUARE)
+        self.preview = ColorView(50, 50, self.color, ColorViewType.SQUARE, False)
         self.append(self.preview)
 
         similar_colors = Gtk.Box(

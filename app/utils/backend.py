@@ -23,7 +23,7 @@ class Backend:
         win.configure(x=int(x), y=int(y))
         self.dpy.flush()
 
-    def set_window_above(self):
+    def set_window_on_top(self):
         if not self.xid:
             return
 

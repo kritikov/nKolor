@@ -17,7 +17,8 @@ class ColorView(Gtk.DrawingArea):
 
     def __init__(self, width: int = 20, height: int = 20, 
                  color: Color = Color(242, 242, 242), 
-                 view_type: ColorViewType = ColorViewType.SQUARE):
+                 view_type: ColorViewType = ColorViewType.SQUARE,
+                 clickable: bool = True):
         super().__init__()
 
         self.color = color
@@ -35,6 +36,22 @@ class ColorView(Gtk.DrawingArea):
         self.add_controller(gesture)
 
         self.set_draw_func(self.on_draw)
+
+        # Pointer cursor όταν μπαίνει το ποντίκι
+        if clickable == True:
+            motion = Gtk.EventControllerMotion()
+            motion.connect("enter", self.on_mouse_enter)
+            motion.connect("leave", self.on_mouse_leave)
+            self.add_controller(motion)
+
+    def on_mouse_enter(self, *args):
+        cursor = Gdk.Cursor.new_from_name("pointer")
+        self.set_cursor(cursor)  
+        return True
+
+    def on_mouse_leave(self, *args):
+        self.set_cursor(None) 
+        return True  
 
 
     # fill the contents of the widget with a custom draw
@@ -87,4 +104,4 @@ class ColorView(Gtk.DrawingArea):
         self.emit("clicked", self.color)
 
 
-    
+ 

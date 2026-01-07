@@ -34,10 +34,14 @@ window {
 }
 
 .history_bar{
-    margin: 4px;
+    margin: 8px;
 }
 .history_bar box {
     padding-bottom: 14px;
+}
+
+.magnifier-window{
+    border: 1px solid gray;
 }
 
 

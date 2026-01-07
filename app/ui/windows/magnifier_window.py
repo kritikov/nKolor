@@ -6,42 +6,55 @@ from gi.repository import Gtk, Gdk, GLib
 from app.utils.backend import Backend
 from app.ui.widgets.crosshair import Crosshair
 from app.utils.color import Color
+from app.ui.widgets.color_view import ColorView
+from app.ui.widgets.color_view import ColorViewType
 
 
 class MagnifierWindow(Gtk.Window):
     def __init__(self):
         super().__init__()
 
-        self.current_color = Color(255, 255, 255)  # default λευκό
-
-        # ---- config ----
-        self.capture_size = 40
-        self.magnification = 3
+        self.backend = Backend()
+        self.current_color = Color(255, 255, 255)  # default white
+        self.capture_size = 30
+        self.magnification = 5
         self.offset = 20
         self.running = False
 
-        # ---- GTK window ----
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_focusable(False)
         self.set_opacity(0.95)
 
-        size = int(self.capture_size * self.magnification)
-        self.set_default_size(size, size)
+        self.size = int(self.capture_size * self.magnification)
+        self.set_default_size(self.size, self.size)
 
-        self.overlay = Gtk.Overlay()
+        self.buid_ui()
+
+
+    def buid_ui(self):
+        root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=0)
+        root_child.add_css_class("magnifier-window")
+        self.set_child(root_child)
+
+        # color preview area
+        self.color_preview = ColorView(self.size, 25, self.current_color, ColorViewType.SQUARE)
+        root_child.append(self.color_preview)
+
+        # zoom area
+        zoom = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        overlay = Gtk.Overlay()
         self.picture = Gtk.Picture()
-        self.overlay.set_child(self.picture)
-
+        overlay.set_child(self.picture)
         self.crosshair = Crosshair()
-        self.overlay.add_overlay(self.crosshair)
+        overlay.add_overlay(self.crosshair)
+        zoom.append(overlay)
+        root_child.append(zoom)
 
-        self.set_child(self.overlay)
 
-        # ---- X11 backend ----
-        self.backend = Backend()
-
-    # -------------------------------------------------
+    # update the preview color
+    def update_color_preview(self):
+        self.color_preview.set_color(self.current_color)
 
     def start(self):
         if self.running:
@@ -54,7 +67,7 @@ class MagnifierWindow(Gtk.Window):
         xid = surface.get_xid()
 
         self.backend.bind_window(xid)
-        self.backend.set_window_above()
+        self.backend.set_window_on_top()
 
         GLib.timeout_add(16, self.tick)
 
@@ -143,17 +156,9 @@ class MagnifierWindow(Gtk.Window):
         try:
             r, g, b = self.backend.get_color_under_cursor()
             self.current_color = Color(r, g, b)
+            self.update_color_preview()
         except Exception:
             pass
-
-        # --- adaptive crosshair color ---
-        brightness = (0.299*r + 0.587*g + 0.114*b)  # perceived luminance
-        if brightness < 128:
-            # σκοτεινό background → λευκό crosshair
-            self.crosshair.set_color_rgba(1, 1, 1, 0.8)
-        else:
-            # φωτεινό background → μαύρο crosshair
-            self.crosshair.set_color_rgba(0, 0, 0, 0.8)
 
         return True  # continue timeout
 

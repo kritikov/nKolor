@@ -5,23 +5,65 @@ class Crosshair(Gtk.DrawingArea):
         super().__init__()
         self.set_hexpand(True)
         self.set_vexpand(True)
-        self.color = (1, 0, 0, 0.8)  # default κόκκινο
-        self.set_draw_func(self.draw)
+        self.light_color = (255, 255, 255, 1)  
+        self.dark_color = (0, 0, 0, 1)  
 
-    def set_color_rgba(self, r, g, b, alpha=0.8):
-        self.color = (r/255, g/255, b/255, alpha)
-        self.queue_draw()  # repaint
+        self.set_draw_func(self.draw)
 
     def draw(self, area, cr, width, height):
         cx = width / 2
         cy = height / 2
-        cr.set_line_width(1)
-        cr.set_source_rgba(*self.color)
+        size = 12
+        internal_radious = 4
 
-        # οριζόντια
-        cr.move_to(cx - 10, cy)
-        cr.line_to(cx + 10, cy)
-        # κάθετη
-        cr.move_to(cx, cy - 10)
-        cr.line_to(cx, cy + 10)
+        # horizontal
+        cr.set_line_width(1)
+        cr.set_source_rgba(*self.light_color)
+        cr.move_to(cx - size, cy-2)
+        cr.line_to(cx - internal_radious, cy-2)
+        cr.move_to(cx + internal_radious, cy-2)
+        cr.line_to(cx + size, cy-2)
         cr.stroke()
+
+        cr.set_line_width(3)
+        cr.set_source_rgba(*self.dark_color)
+        cr.move_to(cx - size, cy)
+        cr.line_to(cx - internal_radious, cy)
+        cr.move_to(cx + internal_radious, cy)
+        cr.line_to(cx + size, cy)
+        cr.stroke()
+
+        cr.set_line_width(1)
+        cr.set_source_rgba(*self.light_color)
+        cr.move_to(cx - size, cy+1)
+        cr.line_to(cx - internal_radious, cy+1)
+        cr.move_to(cx + internal_radious, cy+1)
+        cr.line_to(cx + size, cy+1)
+        cr.stroke()
+
+
+        # vertical
+        cr.set_line_width(1)
+        cr.set_source_rgba(*self.light_color)
+        cr.move_to(cx-2, cy - size)
+        cr.line_to(cx-2, cy - internal_radious)
+        cr.move_to(cx-2, cy + internal_radious)
+        cr.line_to(cx-2, cy + size)
+        cr.stroke()
+
+        cr.set_line_width(3)
+        cr.set_source_rgba(*self.dark_color)
+        cr.move_to(cx, cy - size)
+        cr.line_to(cx, cy - internal_radious)
+        cr.move_to(cx, cy + internal_radious)
+        cr.line_to(cx, cy + size)
+        cr.stroke()
+
+        cr.set_line_width(1)
+        cr.set_source_rgba(*self.light_color)
+        cr.move_to(cx+1, cy - size)
+        cr.line_to(cx+1, cy - internal_radious)
+        cr.move_to(cx+1, cy + internal_radious)
+        cr.line_to(cx+1, cy + size)
+        cr.stroke()
+
