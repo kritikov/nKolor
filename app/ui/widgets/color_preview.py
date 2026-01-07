@@ -31,18 +31,22 @@ class ColorPreview(Gtk.Box):
 
         self.similar_color_1 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
         self.similar_color_1.connect("clicked", self.on_similar_color_select)
+        self.similar_color_1.set_tooltip_text("lighter")
         similar_colors.append(self.similar_color_1)
 
         self.similar_color_2 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
         self.similar_color_2.connect("clicked", self.on_similar_color_select)
+        self.similar_color_2.set_tooltip_text("darker")
         similar_colors.append(self.similar_color_2)
 
         self.similar_color_3 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
         self.similar_color_3.connect("clicked", self.on_similar_color_select)
+        self.similar_color_3.set_tooltip_text("less saturated")
         similar_colors.append(self.similar_color_3)
 
         self.similar_color_4 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
         self.similar_color_4.connect("clicked", self.on_similar_color_select)
+        self.similar_color_4.set_tooltip_text("more saturated")
         similar_colors.append(self.similar_color_4)
 
         self.append(similar_colors)

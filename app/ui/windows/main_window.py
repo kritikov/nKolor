@@ -25,15 +25,19 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     def build_ui(self) -> None:
-        root_child = Gtk.Box(orientation = Gtk.Orientation.HORIZONTAL, spacing=12)
+        root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
         root_child.add_css_class("main-window")
+        self.set_child(root_child)  
 
-        # general cunstruction
+        # general cοnstruction
+        first_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
+        second_row = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         left_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         right_col = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=12)
-        root_child.append(left_col)
-        root_child.append(right_col)
-        self.set_child(root_child)  
+        first_row.append(left_col)
+        first_row.append(right_col)
+        root_child.append(first_row)
+        root_child.append(second_row)
 
         # elements
         self.pick_button = PickButton()
@@ -47,13 +51,13 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.color_preview.set_size_request(100, -1)
         self.color_preview.connect("similar_color_selected", self.on_similar_color_selected)
         left_col.append(self.color_preview)
-
-        self.history_bar = HistoryBar()
-        self.history_bar.connect("color-selected", self.on_history_color_selected)
-        right_col.append(self.history_bar)
         
         self.color_values = ColorValues()
         right_col.append(self.color_values)
+
+        self.history_bar = HistoryBar()
+        self.history_bar.connect("color-selected", self.on_history_color_selected)
+        second_row.append(self.history_bar)
 
 
     # start searching for a color to pick traveling the mouse
@@ -108,7 +112,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
         # add the color in history only if its not the same with the last one to avoid some replications
         last_color = self.history_bar.last_color
-        if color.hex != last_color.hex:
+        if last_color == None or color.hex != last_color.hex:
             self.history_bar.add_color(color)
 
 
