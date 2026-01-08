@@ -1,15 +1,21 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, GObject
 from app.ui.widgets.color_value_bar import ColorValueBar
 from app.utils.color import Color
 
 class ColorValues(Gtk.Box):
     
+    __gsignals__ = {
+        "edit_rgb": (GObject.SignalFlags.RUN_FIRST, None, ()),
+    }
+
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         
         self.set_hexpand(True)
         self.hex_bar = ColorValueBar("HEX", "")
         self.rgb_bar = ColorValueBar("RGB", "")
+        self.rgb_bar.connect("edit", lambda w: self.emit("edit_rgb"))
+
         self.hsl_bar = ColorValueBar("HSL", "")
         self.hsv_bar = ColorValueBar("HSV", "")
 

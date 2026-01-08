@@ -11,12 +11,10 @@ class ColorValueBar(Gtk.Box):
         super().__init__(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
         
         self.add_css_class("value-bar")
-        self.build_ui(title)
-
-        self.value_entry.set_text(value)
+        self.build_ui(title, value)
         
 
-    def build_ui(self, title: str):
+    def build_ui(self, title: str, value: str):
         title_lbl = Gtk.Label(label=f"{title}:")
         title_lbl.set_size_request(50, -1)
         title_lbl.set_xalign(0)
@@ -29,6 +27,7 @@ class ColorValueBar(Gtk.Box):
         self.value_entry.set_editable(False)        
         self.value_entry.set_can_focus(True)        
         self.value_entry.set_hexpand(True)
+        self.value_entry.set_text(value)
         self.value_entry.add_css_class("value-text")
         values_container.append(self.value_entry)
 

@@ -16,6 +16,9 @@ class Crosshair(Gtk.DrawingArea):
         size = 12
         internal_radious = 4
 
+        # Draw a cross with an empty space in the center to view the pixel under of it.
+        # The cross has two colors to be visible in all cases of brightness beneath.
+
         # horizontal
         cr.set_line_width(1)
         cr.set_source_rgba(*self.light_color)

@@ -13,7 +13,7 @@ class ColorPreview(Gtk.Box):
     def __init__(self):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
-        self.color = Color(242, 242, 242)   # initial color: gray
+        self.color = Color()
         self.set_size_request(100, -1)
         self.build_ui()
 
