@@ -14,7 +14,6 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
     def __init__(self, app: Gtk.Application, color: Color):
         super().__init__(application=app, title="RGB editor")
 
-        # self.set_default_size(500, 220)
         self.set_resizable(False) 
         self.color = color.copy()
         self.build_ui()
@@ -27,15 +26,15 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         red, green, blue = self.color.rgb
 
         # inputs
-        red_editor = SliderEditor("R", red, 0, 255)
+        red_editor = SliderEditor("R", round(red), 0, 255)
         red_editor.connect("value_changed", self.on_red_changed)
         root_child.append(red_editor)
 
-        green_editor = SliderEditor("G", green, 0, 255)
+        green_editor = SliderEditor("G", round(green), 0, 255)
         green_editor.connect("value_changed", self.on_green_changed)
         root_child.append(green_editor)
 
-        blue_editor = SliderEditor("B", blue, 0, 255)
+        blue_editor = SliderEditor("B", round(blue), 0, 255)
         blue_editor.connect("value_changed", self.on_blue_changed)
         root_child.append(blue_editor)
 

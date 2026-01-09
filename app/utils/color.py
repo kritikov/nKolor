@@ -5,7 +5,7 @@ import colorsys
 
 class Color:
 
-    def __init__(self, r: int = 255, g: int = 255, b: int = 255):
+    def __init__(self, r: float = 255, g: float = 255, b: float = 255):
         self.h, self.s, self.v = self.rgb_to_hsv(r, g, b)   # h, s, v in [0,1]
 
 
@@ -18,7 +18,7 @@ class Color:
     # default presentation
     def __repr__(self):
         r, g, b = self.rgb
-        return f"Color(RGB=({r}, {g}, {b}), HEX={self.hex_text})"
+        return f"Color(RGB=({r:0X}, {g:0X}, {b:0X}), HEX={self.hex_text})"
 
     # copy the color from the rgb values
     def copy(self) -> "Color":
@@ -36,36 +36,36 @@ class Color:
     
     @property
     def hsv_text(self) -> str:
-        h_deg = int(self.h * 360)
-        s_pct = int(self.s * 100)
-        v_pct = int(self.v * 100)
+        h_deg = round(self.h * 360)
+        s_pct = round(self.s * 100)
+        v_pct = round(self.v * 100)
         return f"hsv({h_deg}, {s_pct}%, {v_pct}%)"
 
 
     @property
-    def rgb(self) -> Tuple[int, int, int]:
+    def rgb(self) -> Tuple[float, float, float]:
         r, g, b = self.hsv_to_rgb(self.h, self.s, self.v)
         return r, g, b
 
     @property
-    def rgb_normalized(self) -> Tuple[int, int, int]:
+    def rgb_normalized(self) -> Tuple[float, float, float]:
         r, g, b = self.rgb
         return self.rgb_to_rgb_normalized(r, g, b)
 
     @property
-    def rgb_text(self) -> Tuple[int, int, int]:
+    def rgb_text(self) -> Tuple[float, float, float]:
         r, g, b = self.rgb
-        return f"rgb({r}, {g}, {b})"
+        return f"rgb({(round(r))}, {(round(g))}, {(round(b))})"
 
     @rgb.setter
-    def rgb(self, value: Tuple[int, int, int]):
+    def rgb(self, value: Tuple[float, float, float]):
         self.h, self.s, self.v = self.rgb_to_hsv(*value)
 
 
     @property
     def hex_text(self) -> str:
         r, g, b = self.rgb
-        return f"#{r:02X}{g:02X}{b:02X}"
+        return f"#{int(round(r)):02X}{int(round(g)):02X}{int(round(b)):02X}"
 
     # @hex.setter
     # def hex(self, value: str):
@@ -88,13 +88,13 @@ class Color:
     @property
     def hsl_text(self) -> str:
         h, s, l = self.hsl
-        h_deg = int(h * 360)
-        s_pct = int(s * 100)
-        l_pct = int(l * 100)
+        h_deg = round(h * 360)
+        s_pct = round(s * 100)
+        l_pct = round(l * 100)
         return f"hsl({h_deg}, {s_pct}%, {l_pct}%)"
 
     @property
-    def hsl_for_ui(self) -> Tuple[int, int, int]:
+    def hsl_for_ui(self) -> Tuple[float, float, float]:
         h, s, l = self.hsl
         h_deg = round(h * 360)
         s_pct = round(s * 100)
@@ -116,7 +116,7 @@ class Color:
     # ------------------
 
     # convert rgb values to hsv values
-    def rgb_to_hsv(self, r: int, g: int, b: int) -> Tuple[float, float, float]:
+    def rgb_to_hsv(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
 
         # 1. normalize RGB
         r_n, g_n, b_n = self.rgb_to_rgb_normalized(r, g, b)
@@ -147,7 +147,7 @@ class Color:
 
 
     # convert rgb values to hsl values
-    def rgb_to_hsl(self, r: int, g: int, b: int) -> Tuple[float, float, float]:
+    def rgb_to_hsl(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
         r_n, g_n, b_n = self.rgb_to_rgb_normalized(r, g, b)
 
         c_max = max(r_n, g_n, b_n)
@@ -173,13 +173,13 @@ class Color:
         else:
             h = ((r_n - g_n) / delta) + 4
 
-        h /= 6  # normalize 0–1
+        h /= 6 
 
         return h, s, l
 
 
     # normalize rgb values
-    def rgb_to_rgb_normalized(self, r: int, g: int, b: int) -> Tuple[int, int, int]:
+    def rgb_to_rgb_normalized(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
         r_n = r / 255.0
         g_n = g / 255.0
         b_n = b / 255.0
@@ -188,11 +188,11 @@ class Color:
     
 
     # convert hsv values to rgb values
-    def hsv_to_rgb(self, h: float, s: float, v: float) -> Tuple[int, int, int]:
+    def hsv_to_rgb(self, h: float, s: float, v: float) -> Tuple[float, float, float]:
         
         if s == 0.0:
             # γκρι / μαύρο / άσπρο
-            r = g = b = int(round(v * 255))
+            r = g = b = v * 255
             return r, g, b
 
         h = h * 6  # scale hue to 0–6
@@ -215,18 +215,18 @@ class Color:
         else:  # i == 5
             r_n, g_n, b_n = v, p, q
 
-        r = int(round(r_n * 255))
-        g = int(round(g_n * 255))
-        b = int(round(b_n * 255))
+        r = r_n * 255
+        g = g_n * 255
+        b = b_n * 255
 
         return r, g, b
 
 
     # convert hsv values to rgb values
-    def hsl_to_rgb(self, h: float, s: float, l: float) -> Tuple[int, int, int]:
+    def hsl_to_rgb(self, h: float, s: float, l: float) -> Tuple[float, float, float]:
         if s == 0.0:
             # grayscale
-            r = g = b = int(round(l * 255))
+            r = g = b = l * 255
             return r, g, b
 
         def hue_to_rgb(p: float, q: float, t: float) -> float:
@@ -244,9 +244,9 @@ class Color:
         g_n = hue_to_rgb(p, q, h)
         b_n = hue_to_rgb(p, q, h - 1/3)
 
-        r = int(round(r_n * 255))
-        g = int(round(g_n * 255))
-        b = int(round(b_n * 255))
+        r = r_n * 255
+        g = g_n * 255
+        b = b_n * 255
 
         return r, g, b
 
@@ -280,28 +280,6 @@ class Color:
     #     if len(value) != 6:
     #         raise ValueError(f"Invalid hex: {value}")
     #     self.r, self.g, self.b = tuple(int(value[i:i+2], 16) for i in (0, 2, 4))
-
-
-    #@hsv_values.setter
-    # def hsv_values(self, value: Tuple[float, float, float]):
-    #     r_n, g_n, b_n = colorsys.hsv_to_rgb(*value)
-    #     self.r, self.g, self.b = int(r_n*255), int(g_n*255), int(b_n*255)
-
-
-    #@hsl_values.setter
-    # def hsl_values(self, value: Tuple[float, float, float]):
-    #     h_deg, s_pct, l_pct = value
-
-    #     # πίσω σε 0.0–1.0
-    #     h = (h_deg % 360) / 360.0
-    #     s = max(0.0, min(s_pct / 100.0, 1.0))
-    #     l = max(0.0, min(l_pct / 100.0, 1.0))
-
-    #     r_n, g_n, b_n = colorsys.hls_to_rgb(h, l, s)
-
-    #     self.r = int(round(r_n * 255))
-    #     self.g = int(round(g_n * 255))
-    #     self.b = int(round(b_n * 255))
 
 
     # -------------------------------

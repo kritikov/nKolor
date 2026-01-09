@@ -12,7 +12,6 @@ class SliderEditor(Gtk.Box):
         self.min_value = min_value
         self.max_value = max_value
 
-        self.updating_from_text = False  # flag για αποφυγή feedback
         self.adjustment = Gtk.Adjustment.new(
             value=value,
             lower=self.min_value,
@@ -57,9 +56,6 @@ class SliderEditor(Gtk.Box):
 
     # actions to do when the value of the slider changed
     def on_slider_input_changed(self, adjustment):
-        if self.updating_from_text:
-            return  # to avoid loop
-
         value = int(adjustment.get_value())
         if value == self.value:
             return
@@ -90,11 +86,7 @@ class SliderEditor(Gtk.Box):
             self.text_input.set_text(str(self.value))
             return
 
-        # flag to avoid loop from on_slider_input_changed
-        self.updating_from_text = True
         self.adjustment.set_value(value)
-        self.updating_from_text = False
-
         self.text_input.set_text(str(value))
 
 
