@@ -5,15 +5,16 @@ from app.ui.widgets.color_view import ColorViewType
 from app.ui.widgets.slider_editor import SliderEditor
 
 
-class RgbEditorWindow(Gtk.ApplicationWindow):
+class HsvEditorWindow(Gtk.ApplicationWindow):
 
     __gsignals__ = {
             "color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         }
 
     def __init__(self, app: Gtk.Application, color: Color):
-        super().__init__(application=app, title="RGB editor")
+        super().__init__(application=app, title="HSV editor")
 
+        # self.set_default_size(500, 220)
         self.set_resizable(False) 
         self.color = color.copy()
         self.build_ui()
@@ -23,20 +24,20 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
 
-        red, green, blue = self.color.rgb
+        hue, saturation, value = self.color.hsv_for_ui
 
         # inputs
-        red_editor = SliderEditor("R", round(red), 0, 255)
-        red_editor.connect("value_changed", self.on_red_changed)
-        root_child.append(red_editor)
+        hue_editor = SliderEditor("Hue", hue, 0, 360)
+        hue_editor.connect("value_changed", self.on_hue_changed)
+        root_child.append(hue_editor)
 
-        green_editor = SliderEditor("G", round(green), 0, 255)
-        green_editor.connect("value_changed", self.on_green_changed)
-        root_child.append(green_editor)
+        saturation_editor = SliderEditor("Saturation", saturation, 0, 100)
+        saturation_editor.connect("value_changed", self.on_saturation_changed)
+        root_child.append(saturation_editor)
 
-        blue_editor = SliderEditor("B", round(blue), 0, 255)
-        blue_editor.connect("value_changed", self.on_blue_changed)
-        root_child.append(blue_editor)
+        value_editor = SliderEditor("Value", value, 0, 100)
+        value_editor.connect("value_changed", self.on_value_changed)
+        root_child.append(value_editor)
 
         # bottom row
         bottom_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -59,22 +60,22 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         bottom_row.append(buttons)
 
 
-    def on_red_changed(self, widget, new_value):
-        red, green, blue = self.color.rgb
-        red = new_value
-        self.color.rgb = red, green, blue
+    def on_hue_changed(self, widget, new_value):
+        hue, saturation, value = self.color.hsv_for_ui
+        hue = new_value
+        self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
-    def on_green_changed(self, widget, new_value):
-        red, green, blue = self.color.rgb
-        green = new_value
-        self.color.rgb = red, green, blue
+    def on_saturation_changed(self, widget, new_value):
+        hue, saturation, value = self.color.hsv_for_ui
+        saturation = new_value
+        self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
-    def on_blue_changed(self, widget, new_value):
-        red, green, blue = self.color.rgb
-        blue = new_value
-        self.color.rgb = red, green, blue
+    def on_value_changed(self, widget, new_value):
+        hue, saturation, value = self.color.hsv_for_ui
+        value = new_value
+        self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
     def update_preview(self):

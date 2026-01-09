@@ -22,7 +22,7 @@ class ColorValues(Gtk.Box):
         self.hsl_bar.connect("edit", lambda w: self.emit("edit_hsl"))
 
         self.hsv_bar = ColorValueBar("HSV", "")
-        self.hsl_bar.connect("edit", lambda w: self.emit("edit_hsv"))
+        self.hsv_bar.connect("edit", lambda w: self.emit("edit_hsv"))
 
         self.append(self.hex_bar)
         self.append(self.rgb_bar)

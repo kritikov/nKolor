@@ -36,10 +36,22 @@ class Color:
     
     @property
     def hsv_text(self) -> str:
+        h_deg, s_pct, v_pct = self.hsv_for_ui
+        return f"hsv({h_deg}, {s_pct}%, {v_pct}%)"
+
+    @property
+    def hsv_for_ui(self) -> Tuple[float, float, float]:
         h_deg = round(self.h * 360)
         s_pct = round(self.s * 100)
         v_pct = round(self.v * 100)
-        return f"hsv({h_deg}, {s_pct}%, {v_pct}%)"
+        return h_deg, s_pct, v_pct
+
+    @hsv_for_ui.setter
+    def hsv_for_ui(self, value: Tuple[float, float, float]):
+        h_deg, s_pct, v_pct = value
+        self.h = h_deg / 360
+        self.s = s_pct / 100
+        self.v = v_pct / 100
 
 
     @property
@@ -87,10 +99,7 @@ class Color:
     
     @property
     def hsl_text(self) -> str:
-        h, s, l = self.hsl
-        h_deg = round(h * 360)
-        s_pct = round(s * 100)
-        l_pct = round(l * 100)
+        h_deg, s_pct, l_pct = self.hsl_for_ui
         return f"hsl({h_deg}, {s_pct}%, {l_pct}%)"
 
     @property

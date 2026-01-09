@@ -10,6 +10,7 @@ from app.utils.color import Color
 from app.ui.windows.magnifier_window import MagnifierWindow
 from app.ui.windows.rgb_editor_window import RgbEditorWindow
 from app.ui.windows.hsl_editor_window import HslEditorWindow
+from app.ui.windows.hsv_editor_window import HsvEditorWindow
 
 class MainWindow(Gtk.ApplicationWindow) : 
 
@@ -157,10 +158,14 @@ class MainWindow(Gtk.ApplicationWindow) :
         win = RgbEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
-
     # open the hsl editor to edit the color
     def on_edit_hsl(self, widget):
         win = HslEditorWindow(self.get_application(), self.current_color)
+        self.open_color_editor(win)
+
+    # open the hsv editor to edit the color
+    def on_edit_hsv(self, widget):
+        win = HsvEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
 
@@ -173,13 +178,4 @@ class MainWindow(Gtk.ApplicationWindow) :
         editor.present()
 
 
-    # open the rgb editor to edit the color
-    def on_edit_hsv(self, widget):
-        ...
-        # win = RgbEditorWindow(self.get_application(), self.current_color)
-        # win.connect("color_selected", self.on_rgb_color_selected)
-        # win.set_transient_for(self)
-        # win.set_modal(True)
-        # win.set_destroy_with_parent(True)
-        # win.present()
     

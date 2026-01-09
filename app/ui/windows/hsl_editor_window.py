@@ -24,7 +24,7 @@ class HslEditorWindow(Gtk.ApplicationWindow):
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
 
-        hue, saturation, lightness = self.color.hsl_for_ui
+        hue, saturation, lightness = self.color.hsv_for_ui
 
         # inputs
         hue_editor = SliderEditor("Hue", hue, 0, 360)
@@ -60,22 +60,22 @@ class HslEditorWindow(Gtk.ApplicationWindow):
         bottom_row.append(buttons)
 
 
-    def on_hue_changed(self, widget, value):
-        hue, saturation, lightness = self.color.hsl_for_ui
-        hue = value
-        self.color.hsl_for_ui = hue, saturation, lightness
+    def on_hue_changed(self, widget, new_value):
+        hue, saturation, lightness = self.color.hsv_for_ui
+        hue = new_value
+        self.color.hsv_for_ui = hue, saturation, lightness
         self.update_preview()
 
-    def on_saturation_changed(self, widget, value):
-        hue, saturation, lightness = self.color.hsl_for_ui
-        saturation = value
-        self.color.hsl_for_ui = hue, saturation, lightness
+    def on_saturation_changed(self, widget, new_value):
+        hue, saturation, lightness = self.color.hsv_for_ui
+        saturation = new_value
+        self.color.hsv_for_ui = hue, saturation, lightness
         self.update_preview()
 
-    def on_lightness_changed(self, widget, value):
-        hue, saturation, lightness = self.color.hsl_for_ui
-        lightness = value
-        self.color.hsl_for_ui = hue, saturation, lightness
+    def on_lightness_changed(self, widget, new_value):
+        hue, saturation, lightness = self.color.hsv_for_ui
+        lightness = new_value
+        self.color.hsv_for_ui = hue, saturation, lightness
         self.update_preview()
 
     def update_preview(self):
