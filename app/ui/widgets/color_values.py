@@ -6,6 +6,8 @@ class ColorValues(Gtk.Box):
     
     __gsignals__ = {
         "edit_rgb": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "edit_hsl": (GObject.SignalFlags.RUN_FIRST, None, ()),
+        "edit_hsv": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
     def __init__(self):
@@ -17,7 +19,10 @@ class ColorValues(Gtk.Box):
         self.rgb_bar.connect("edit", lambda w: self.emit("edit_rgb"))
 
         self.hsl_bar = ColorValueBar("HSL", "")
+        self.hsl_bar.connect("edit", lambda w: self.emit("edit_hsl"))
+
         self.hsv_bar = ColorValueBar("HSV", "")
+        self.hsl_bar.connect("edit", lambda w: self.emit("edit_hsv"))
 
         self.append(self.hex_bar)
         self.append(self.rgb_bar)

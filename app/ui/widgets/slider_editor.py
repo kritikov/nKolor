@@ -25,20 +25,23 @@ class SliderEditor(Gtk.Box):
 
         self.build_ui()
 
-        # connect adjustment after UI built
         self.adjustment.connect("value-changed", self.on_slider_input_changed)
 
 
     def build_ui(self):
+
+        # label
         label = Gtk.Label(label=self.title)
         label.set_size_request(20, -1)
         self.append(label)
 
+        # slider input
         self.slider_input = Gtk.Scale(orientation=Gtk.Orientation.HORIZONTAL, adjustment=self.adjustment)
         self.slider_input.set_draw_value(False)
         self.slider_input.set_hexpand(True)
         self.append(self.slider_input)
 
+        # text input
         self.text_input = Gtk.Entry()
         self.text_input.set_width_chars(4)
         self.text_input.set_max_width_chars(5)
@@ -55,15 +58,16 @@ class SliderEditor(Gtk.Box):
     # actions to do when the value of the slider changed
     def on_slider_input_changed(self, adjustment):
         if self.updating_from_text:
-            return  # αποφυγή feedback loop
+            return  # to avoid loop
 
         value = int(adjustment.get_value())
         if value == self.value:
             return
 
         self.value = value
-        Gtk.idle_add(self.text_input.set_text, str(value))
+        self.text_input.set_text(str(self.value))
         self.emit("value_changed", value)
+
 
     # actions to do when the value of the text input changed
     def on_text_input_set_value(self, widget):

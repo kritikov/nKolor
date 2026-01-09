@@ -67,13 +67,28 @@ class Color:
     def hsl_values(self) -> Tuple[float, float, float]:
         r_n, g_n, b_n = self.r / 255, self.g / 255, self.b / 255
         h, l, s = colorsys.rgb_to_hls(r_n, g_n, b_n)
-        return h, s, l  # swapped to HSL order
+
+        h_deg = int(h * 360)
+        s_pct = int(s * 100)
+        l_pct = int(l * 100)
+
+        return h_deg, s_pct, l_pct
 
     @hsl_values.setter
     def hsl_values(self, value: Tuple[float, float, float]):
-        h, s, l = value
-        r_n, g_n, b_n = colorsys.hls_to_rgb(h, l, s)  # note HLS order
-        self.r, self.g, self.b = int(r_n*255), int(g_n*255), int(b_n*255)
+        h_deg, s_pct, l_pct = value
+
+        # πίσω σε 0.0–1.0
+        h = (h_deg % 360) / 360.0
+        s = max(0.0, min(s_pct / 100.0, 1.0))
+        l = max(0.0, min(l_pct / 100.0, 1.0))
+
+        r_n, g_n, b_n = colorsys.hls_to_rgb(h, l, s)
+
+        self.r = int(round(r_n * 255))
+        self.g = int(round(g_n * 255))
+        self.b = int(round(b_n * 255))
+
 
     # -------------------------------
     # Helpers

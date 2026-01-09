@@ -9,6 +9,7 @@ from app.ui.widgets.color_values import ColorValues
 from app.utils.color import Color
 from app.ui.windows.magnifier_window import MagnifierWindow
 from app.ui.windows.rgb_editor_window import RgbEditorWindow
+from app.ui.windows.hsl_editor_window import HslEditorWindow
 
 class MainWindow(Gtk.ApplicationWindow) : 
 
@@ -57,6 +58,8 @@ class MainWindow(Gtk.ApplicationWindow) :
         
         self.color_values = ColorValues()
         self.color_values.connect("edit_rgb", self.on_edit_rgb)
+        self.color_values.connect("edit_hsl", self.on_edit_hsl)
+        self.color_values.connect("edit_hsv", self.on_edit_hsv)
         self.color_values.set_color(self.current_color)
         right_col.append(self.color_values)
 
@@ -124,7 +127,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     # actions to take after a color is updated from the RGB editor
-    def on_rgb_color_selected(self, widget, color):
+    def on_color_edited(self, widget, color):
         self.current_color = color.copy()
         self.color_preview.set_color(self.current_color)
         self.color_values.set_color(self.current_color)
@@ -147,13 +150,31 @@ class MainWindow(Gtk.ApplicationWindow) :
         if surface:
             surface.set_cursor(None)
 
-
+    # open the rgb editor to edit the color
     def on_edit_rgb(self, widget):
         win = RgbEditorWindow(self.get_application(), self.current_color)
-        win.connect("color_selected", self.on_rgb_color_selected)
-        win.set_transient_for(self)
-        win.set_modal(True)
-        win.set_destroy_with_parent(True)
-        win.present()
+        self.open_color_editor(win)
 
+    # open the hsl editor to edit the color
+    def on_edit_hsl(self, widget):
+        win = HslEditorWindow(self.get_application(), self.current_color)
+        self.open_color_editor(win)
+
+    # open a color editor
+    def open_color_editor(self, editor):
+        editor.connect("color_selected", self.on_color_edited)
+        editor.set_transient_for(self)
+        editor.set_modal(True)
+        editor.set_destroy_with_parent(True)
+        editor.present()
+
+    # open the rgb editor to edit the color
+    def on_edit_hsv(self, widget):
+        ...
+        # win = RgbEditorWindow(self.get_application(), self.current_color)
+        # win.connect("color_selected", self.on_rgb_color_selected)
+        # win.set_transient_for(self)
+        # win.set_modal(True)
+        # win.set_destroy_with_parent(True)
+        # win.present()
     
