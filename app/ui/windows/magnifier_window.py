@@ -55,6 +55,7 @@ class MagnifierWindow(Gtk.Window):
     # update the preview color
     def update_color_preview(self):
         self.color_preview.set_color(self.current_color)
+        
 
     def start(self):
         if self.running:

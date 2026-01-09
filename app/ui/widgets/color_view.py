@@ -63,7 +63,8 @@ class ColorView(Gtk.DrawingArea):
         half_border = border_width / 2
 
         # fill color
-        cr.set_source_rgb(self.color.r / 255, self.color.g / 255, self.color.b / 255)
+        r_n, g_n, b_n = self.color.rgb_normalized
+        cr.set_source_rgb(r_n, g_n, b_n)
 
         # shape
         if self.view_type == ColorViewType.SQUARE:

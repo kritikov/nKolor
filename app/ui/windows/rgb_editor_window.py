@@ -24,16 +24,18 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
 
+        red, green, blue = self.color.rgb
+
         # inputs
-        red_editor = SliderEditor("R", self.color.r, 0, 255)
+        red_editor = SliderEditor("R", red, 0, 255)
         red_editor.connect("value_changed", self.on_red_changed)
         root_child.append(red_editor)
 
-        green_editor = SliderEditor("G", self.color.g, 0, 255)
+        green_editor = SliderEditor("G", green, 0, 255)
         green_editor.connect("value_changed", self.on_green_changed)
         root_child.append(green_editor)
 
-        blue_editor = SliderEditor("B", self.color.b, 0, 255)
+        blue_editor = SliderEditor("B", blue, 0, 255)
         blue_editor.connect("value_changed", self.on_blue_changed)
         root_child.append(blue_editor)
 
@@ -59,15 +61,21 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
 
 
     def on_red_changed(self, widget, value):
-        self.color.r = value
+        red, green, blue = self.color.rgb
+        red = value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
     def on_green_changed(self, widget, value):
-        self.color.g = value
+        red, green, blue = self.color.rgb
+        green = value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
     def on_blue_changed(self, widget, value):
-        self.color.b = value
+        red, green, blue = self.color.rgb
+        blue = value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
     def update_preview(self):

@@ -30,7 +30,7 @@ class ColorValues(Gtk.Box):
         self.append(self.hsv_bar)
 
     def set_color(self, color: Color):
-        self.hex_bar.set_value(color.hex)
-        self.rgb_bar.set_value(color.rgb)
-        self.hsl_bar.set_value(color.hsl)
-        self.hsv_bar.set_value(color.hsv)
+        self.hex_bar.set_value(color.hex_text)
+        self.rgb_bar.set_value(color.rgb_text)
+        self.hsl_bar.set_value(color.hsl_text)
+        self.hsv_bar.set_value(color.hsv_text)

@@ -19,7 +19,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.set_default_size(500, 220)
         self.set_resizable(False) 
         self.picking = False
-        self.current_color = Color(121, 150, 0) # initial color
+        self.current_color = Color(255, 0, 0) # initial color
 
         self.magnifier = MagnifierWindow()
         self.active = False
@@ -90,6 +90,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.reset_cursor()
 
 
+    # actions to take after the magnifier is closed without picking a color
     def on_magnifier_aborted(self, widget):
         print("on_magnifier_aborted")
 
@@ -122,7 +123,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
         # add the color in history only if its not the same with the last one to avoid some replications
         last_color = self.history_bar.last_color
-        if last_color == None or self.current_color.hex != last_color.hex:  # TODO method in Color to compare colors
+        if last_color == None or self.current_color != last_color: 
             self.history_bar.add_color(color)
 
 
@@ -150,15 +151,18 @@ class MainWindow(Gtk.ApplicationWindow) :
         if surface:
             surface.set_cursor(None)
 
+
     # open the rgb editor to edit the color
     def on_edit_rgb(self, widget):
         win = RgbEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
+
     # open the hsl editor to edit the color
     def on_edit_hsl(self, widget):
         win = HslEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
+
 
     # open a color editor
     def open_color_editor(self, editor):
@@ -167,6 +171,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         editor.set_modal(True)
         editor.set_destroy_with_parent(True)
         editor.present()
+
 
     # open the rgb editor to edit the color
     def on_edit_hsv(self, widget):
