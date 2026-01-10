@@ -1,7 +1,4 @@
-# app/utils/color_utils.py
-
 from typing import Tuple
-import colorsys
 
 class Color:
 

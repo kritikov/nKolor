@@ -5,6 +5,7 @@ from app.utils.color import Color
 class ColorValues(Gtk.Box):
     
     __gsignals__ = {
+        "edit_hex": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "edit_rgb": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "edit_hsl": (GObject.SignalFlags.RUN_FIRST, None, ()),
         "edit_hsv": (GObject.SignalFlags.RUN_FIRST, None, ()),
@@ -15,6 +16,8 @@ class ColorValues(Gtk.Box):
         
         self.set_hexpand(True)
         self.hex_bar = ColorValueBar("HEX", "")
+        self.hex_bar.connect("edit", lambda w: self.emit("edit_hex"))
+
         self.rgb_bar = ColorValueBar("RGB", "")
         self.rgb_bar.connect("edit", lambda w: self.emit("edit_rgb"))
 

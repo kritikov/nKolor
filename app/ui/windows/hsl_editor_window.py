@@ -3,6 +3,7 @@ from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView
 from app.ui.widgets.color_view import ColorViewType
 from app.ui.widgets.slider_editor import SliderEditor
+from app.ui.widgets.slider_editor import SliderEditorFormat
 
 
 class HslEditorWindow(Gtk.ApplicationWindow):
@@ -14,7 +15,7 @@ class HslEditorWindow(Gtk.ApplicationWindow):
     def __init__(self, app: Gtk.Application, color: Color):
         super().__init__(application=app, title="HSL editor")
 
-        # self.set_default_size(500, 220)
+        self.set_default_size(370, -1)
         self.set_resizable(False) 
         self.color = color.copy()
         self.build_ui()
@@ -27,15 +28,15 @@ class HslEditorWindow(Gtk.ApplicationWindow):
         hue, saturation, lightness = self.color.hsv_for_ui
 
         # inputs
-        hue_editor = SliderEditor("Hue", hue, 0, 360)
+        hue_editor = SliderEditor("Hue", hue, 0, 360, SliderEditorFormat.INTEGER, 90)
         hue_editor.connect("value_changed", self.on_hue_changed)
         root_child.append(hue_editor)
 
-        saturation_editor = SliderEditor("Saturation", saturation, 0, 100)
+        saturation_editor = SliderEditor("Saturation", saturation, 0, 100, SliderEditorFormat.INTEGER, 90)
         saturation_editor.connect("value_changed", self.on_saturation_changed)
         root_child.append(saturation_editor)
 
-        lightness_editor = SliderEditor("Lightness", lightness, 0, 100)
+        lightness_editor = SliderEditor("Lightness", lightness, 0, 100, SliderEditorFormat.INTEGER, 90)
         lightness_editor.connect("value_changed", self.on_lightness_changed)
         root_child.append(lightness_editor)
 
@@ -44,7 +45,7 @@ class HslEditorWindow(Gtk.ApplicationWindow):
         root_child.append(bottom_row)
 
         # color preview
-        self.color_preview = ColorView(120, 30, self.color, ColorViewType.SQUARE)
+        self.color_preview = ColorView(120, 30, self.color, ColorViewType.SQUARE, False)
         bottom_row.append(self.color_preview)
 
         # buttons

@@ -3,6 +3,7 @@ from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView
 from app.ui.widgets.color_view import ColorViewType
 from app.ui.widgets.slider_editor import SliderEditor
+from app.ui.widgets.slider_editor import SliderEditorFormat
 
 
 class RgbEditorWindow(Gtk.ApplicationWindow):
@@ -26,15 +27,15 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         red, green, blue = self.color.rgb
 
         # inputs
-        red_editor = SliderEditor("R", round(red), 0, 255)
+        red_editor = SliderEditor("Red", round(red), 0, 255, SliderEditorFormat.INTEGER, 60)
         red_editor.connect("value_changed", self.on_red_changed)
         root_child.append(red_editor)
 
-        green_editor = SliderEditor("G", round(green), 0, 255)
+        green_editor = SliderEditor("Green", round(green), 0, 255, SliderEditorFormat.INTEGER, 60)
         green_editor.connect("value_changed", self.on_green_changed)
         root_child.append(green_editor)
 
-        blue_editor = SliderEditor("B", round(blue), 0, 255)
+        blue_editor = SliderEditor("Blue", round(blue), 0, 255, SliderEditorFormat.INTEGER, 60)
         blue_editor.connect("value_changed", self.on_blue_changed)
         root_child.append(blue_editor)
 
@@ -43,7 +44,7 @@ class RgbEditorWindow(Gtk.ApplicationWindow):
         root_child.append(bottom_row)
 
         # color preview
-        self.color_preview = ColorView(120, 30, self.color, ColorViewType.SQUARE)
+        self.color_preview = ColorView(120, 30, self.color, ColorViewType.SQUARE, False)
         bottom_row.append(self.color_preview)
 
         # buttons

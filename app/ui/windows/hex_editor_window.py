@@ -6,39 +6,39 @@ from app.ui.widgets.slider_editor import SliderEditor
 from app.ui.widgets.slider_editor import SliderEditorFormat
 
 
-class HsvEditorWindow(Gtk.ApplicationWindow):
+class HexEditorWindow(Gtk.ApplicationWindow):
 
     __gsignals__ = {
             "color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         }
 
     def __init__(self, app: Gtk.Application, color: Color):
-        super().__init__(application=app, title="HSV editor")
+        super().__init__(application=app, title="HEX editor")
 
-        self.set_default_size(370, -1)
         self.set_resizable(False) 
         self.color = color.copy()
         self.build_ui()
+
 
     def build_ui(self):
         root_child = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
 
-        hue, saturation, value = self.color.hsv_for_ui
+        red, green, blue = self.color.rgb
 
         # inputs
-        hue_editor = SliderEditor("Hue", hue, 0, 360, SliderEditorFormat.INTEGER, 90)
-        hue_editor.connect("value_changed", self.on_hue_changed)
-        root_child.append(hue_editor)
+        red_editor = SliderEditor("Red", round(red), 0, 255, SliderEditorFormat.HEX, 60)
+        red_editor.connect("value_changed", self.on_red_changed)
+        root_child.append(red_editor)
 
-        saturation_editor = SliderEditor("Saturation", saturation, 0, 100, SliderEditorFormat.INTEGER, 90)
-        saturation_editor.connect("value_changed", self.on_saturation_changed)
-        root_child.append(saturation_editor)
+        green_editor = SliderEditor("Green", round(green), 0, 255, SliderEditorFormat.HEX, 60)
+        green_editor.connect("value_changed", self.on_green_changed)
+        root_child.append(green_editor)
 
-        value_editor = SliderEditor("Value", value, 0, 100, SliderEditorFormat.INTEGER, 90)
-        value_editor.connect("value_changed", self.on_value_changed)
-        root_child.append(value_editor)
+        blue_editor = SliderEditor("Blue", round(blue), 0, 255, SliderEditorFormat.HEX, 60)
+        blue_editor.connect("value_changed", self.on_blue_changed)
+        root_child.append(blue_editor)
 
         # bottom row
         bottom_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -54,29 +54,28 @@ class HsvEditorWindow(Gtk.ApplicationWindow):
         cancel = Gtk.Button(label="Cancel")
         cancel.connect("clicked", lambda *_: self.close())
         ok = Gtk.Button(label="Apply")
-        ok.add_css_class("suggested-action")
         ok.connect("clicked", self.on_apply_color)
         buttons.append(cancel)
         buttons.append(ok)
         bottom_row.append(buttons)
 
 
-    def on_hue_changed(self, widget, new_value):
-        hue, saturation, value = self.color.hsv_for_ui
-        hue = new_value
-        self.color.hsv_for_ui = hue, saturation, value
+    def on_red_changed(self, widget, new_value):
+        red, green, blue = self.color.rgb
+        red = new_value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
-    def on_saturation_changed(self, widget, new_value):
-        hue, saturation, value = self.color.hsv_for_ui
-        saturation = new_value
-        self.color.hsv_for_ui = hue, saturation, value
+    def on_green_changed(self, widget, new_value):
+        red, green, blue = self.color.rgb
+        green = new_value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
-    def on_value_changed(self, widget, new_value):
-        hue, saturation, value = self.color.hsv_for_ui
-        value = new_value
-        self.color.hsv_for_ui = hue, saturation, value
+    def on_blue_changed(self, widget, new_value):
+        red, green, blue = self.color.rgb
+        blue = new_value
+        self.color.rgb = red, green, blue
         self.update_preview()
 
     def update_preview(self):

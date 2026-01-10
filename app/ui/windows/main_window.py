@@ -8,9 +8,11 @@ from app.ui.widgets.color_preview import ColorPreview
 from app.ui.widgets.color_values import ColorValues
 from app.utils.color import Color
 from app.ui.windows.magnifier_window import MagnifierWindow
+from app.ui.windows.hex_editor_window import HexEditorWindow
 from app.ui.windows.rgb_editor_window import RgbEditorWindow
 from app.ui.windows.hsl_editor_window import HslEditorWindow
 from app.ui.windows.hsv_editor_window import HsvEditorWindow
+
 
 class MainWindow(Gtk.ApplicationWindow) : 
 
@@ -58,6 +60,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         left_col.append(self.color_preview)
         
         self.color_values = ColorValues()
+        self.color_values.connect("edit_hex", self.on_edit_hex)
         self.color_values.connect("edit_rgb", self.on_edit_rgb)
         self.color_values.connect("edit_hsl", self.on_edit_hsl)
         self.color_values.connect("edit_hsv", self.on_edit_hsv)
@@ -152,6 +155,11 @@ class MainWindow(Gtk.ApplicationWindow) :
         if surface:
             surface.set_cursor(None)
 
+
+    # open the hex editor to edit the color
+    def on_edit_hex(self, widget):
+        win = HexEditorWindow(self.get_application(), self.current_color)
+        self.open_color_editor(win)
 
     # open the rgb editor to edit the color
     def on_edit_rgb(self, widget):
