@@ -21,11 +21,9 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.set_title("nKolor")
         self.set_default_size(500, 220)
         self.set_resizable(False) 
-        self.picking = False
+        # self.picking = False
         self.current_color = Color(255, 0, 0) # initial color
-
         self.magnifier = MagnifierWindow()
-        self.active = False
 
         self.build_ui()
 
@@ -47,8 +45,8 @@ class MainWindow(Gtk.ApplicationWindow) :
 
         # elements
         self.pick_button = PickButton()
-        self.pick_button.connect("pressed", self.on_start_pick_mode)
-        self.pick_button.connect("released", self.on_stop_pick_mode)
+        self.pick_button.connect("start", self.on_start_pick_mode)
+        self.pick_button.connect("stop", self.on_stop_pick_mode)
         self.pick_button.connect("aborted", self.on_magnifier_aborted)
         self.pick_button.connect("color-selected", self.on_magnifier_color_selected)
         left_col.append(self.pick_button)
@@ -74,32 +72,21 @@ class MainWindow(Gtk.ApplicationWindow) :
 
     # start searching for a color to pick traveling the mouse
     def on_start_pick_mode(self, widget):
-        if self.picking:
-            return
-
         self.magnifier.start()
-        self.picking = True
         self.pick_button.set_text("Release")
         self.set_picker_cursor()
 
 
     # pick color from the pixel under the mouse
     def on_stop_pick_mode(self, widget):
-        if not self.picking:
-            return
-        
         self.magnifier.stop()
-        self.picking = False
         self.pick_button.set_text("Pick color")
         self.reset_cursor()
 
 
     # actions to take after the magnifier is closed without picking a color
     def on_magnifier_aborted(self, widget):
-        print("on_magnifier_aborted")
-
         self.magnifier.stop()
-        self.picking = False
         self.pick_button.set_text("Pick color")
         self.reset_cursor()
 
