@@ -48,7 +48,6 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.pick_button.connect("start", self.on_start_pick_mode)
         self.pick_button.connect("stop", self.on_stop_pick_mode)
         self.pick_button.connect("aborted", self.on_magnifier_aborted)
-        self.pick_button.connect("color-selected", self.on_magnifier_color_selected)
         left_col.append(self.pick_button)
 
         self.color_preview = ColorPreview()
@@ -76,12 +75,16 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.pick_button.set_text("Release")
         self.set_picker_cursor()
 
-
-    # pick color from the pixel under the mouse
+        
+    # actions to take after a new color is picked from the magnifier
     def on_stop_pick_mode(self, widget):
         self.magnifier.stop()
         self.pick_button.set_text("Pick color")
         self.reset_cursor()
+        self.current_color = self.magnifier.current_color
+        self.color_preview.set_color(self.current_color)
+        self.color_values.set_color(self.current_color)
+        self.history_bar.add_color(self.current_color)
 
 
     # actions to take after the magnifier is closed without picking a color
@@ -90,15 +93,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.pick_button.set_text("Pick color")
         self.reset_cursor()
 
-        
-    # actions to take after a new color is picked from the magnifier
-    def on_magnifier_color_selected(self, widget):
-        self.current_color = self.magnifier.current_color
-        self.color_preview.set_color(self.current_color)
-        self.color_values.set_color(self.current_color)
-        self.history_bar.add_color(self.current_color)
-
-   
+ 
     # actions to take after a color is picked from the history
     def on_history_color_selected(self, widget, color):
         self.current_color = color
