@@ -11,16 +11,17 @@ class PickButton(Gtk.Frame):
         super().__init__() 
         
         self.picking = False
+        self.set_hexpand(False)
+        self.set_halign(Gtk.Align.START)
+        self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+      
+        self.add_css_class("icon-button") 
 
-        # self.set_size_request(100, 30) 
-        self.add_css_class("pick-button") 
-        self.label = Gtk.Label(label="Pick") 
-        self.set_child(self.label) 
-        
-        # GestureClick for events 
-        self.gesture = Gtk.GestureClick() 
-        self.gesture.set_button(0) 
-        
+        # icon
+        icon = Gtk.Image.new_from_file("app/resources/icons/dropper.png")
+        icon.set_tooltip_text("prick for screen")
+        self.set_child(icon)
+
          # Legacy controller για όλα τα mouse events
         controller = Gtk.EventControllerLegacy()
         controller.connect("event", self.on_event)
@@ -55,7 +56,3 @@ class PickButton(Gtk.Frame):
                     self.picking = False
                     self.emit("aborted")
 
-
-    # set the text of the button 
-    def set_text(self, text: str): 
-        self.label.set_text(text)

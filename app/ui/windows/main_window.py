@@ -12,16 +12,17 @@ from app.ui.windows.hex_editor_window import HexEditorWindow
 from app.ui.windows.rgb_editor_window import RgbEditorWindow
 from app.ui.windows.hsl_editor_window import HslEditorWindow
 from app.ui.windows.hsv_editor_window import HsvEditorWindow
+from app.ui.windows.hsv_picker_window import HSVPickerWindow
 
 
 class MainWindow(Gtk.ApplicationWindow) : 
 
     def __init__(self, app: Gtk.Application) -> None:
         super().__init__(application=app)
+        
         self.set_title("nKolor")
         self.set_default_size(500, 220)
         self.set_resizable(False) 
-        # self.picking = False
         self.current_color = Color(255, 0, 0) # initial color
         self.magnifier = MagnifierWindow()
 
@@ -36,7 +37,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         # general cοnstruction
         first_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
         second_row = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        left_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
+        left_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
         right_col = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=12)
         first_row.append(left_col)
         first_row.append(right_col)
@@ -44,11 +45,23 @@ class MainWindow(Gtk.ApplicationWindow) :
         root_child.append(second_row)
 
         # elements
-        self.pick_button = PickButton()
-        self.pick_button.connect("start", self.on_start_pick_mode)
-        self.pick_button.connect("stop", self.on_stop_pick_mode)
-        self.pick_button.connect("aborted", self.on_magnifier_aborted)
-        left_col.append(self.pick_button)
+        left_col_buttons = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        left_col.append(left_col_buttons)
+
+        pick_button = PickButton()
+        pick_button.connect("start", self.on_start_pick_mode)
+        pick_button.connect("stop", self.on_stop_pick_mode)
+        pick_button.connect("aborted", self.on_magnifier_aborted)
+        left_col_buttons.append(pick_button)
+
+        hsv_selector_btn = Gtk.Button()
+        hsv_selector_btn.add_css_class("icon-button") 
+        hsv_selector_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+        hsv_selector_icon = Gtk.Image.new_from_file("app/resources/icons/color-wheel.png")
+        hsv_selector_btn.set_child(hsv_selector_icon);
+        hsv_selector_btn.set_tooltip_text("copy to clipboard")
+        hsv_selector_btn.connect("clicked", self.open_hsv_selector)
+        left_col_buttons.append(hsv_selector_btn)
 
         self.color_preview = ColorPreview()
         self.color_preview.set_size_request(100, -1)
@@ -70,16 +83,16 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     # start searching for a color to pick traveling the mouse
-    def on_start_pick_mode(self, widget):
+    def on_start_pick_mode(self, widget) -> None:
         self.magnifier.start()
-        self.pick_button.set_text("Release")
+        # self.pick_button.set_text("Release")
         self.set_picker_cursor()
 
         
     # actions to take after a new color is picked from the magnifier
-    def on_stop_pick_mode(self, widget):
+    def on_stop_pick_mode(self, widget) -> None:
         self.magnifier.stop()
-        self.pick_button.set_text("Pick color")
+        # self.pick_button.set_text("Pick color")
         self.reset_cursor()
         self.current_color = self.magnifier.current_color
         self.color_preview.set_color(self.current_color)
@@ -88,21 +101,21 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     # actions to take after the magnifier is closed without picking a color
-    def on_magnifier_aborted(self, widget):
+    def on_magnifier_aborted(self, widget) -> None:
         self.magnifier.stop()
-        self.pick_button.set_text("Pick color")
+        # self.pick_button.set_text("Pick color")
         self.reset_cursor()
 
  
     # actions to take after a color is picked from the history
-    def on_history_color_selected(self, widget, color):
+    def on_history_color_selected(self, widget, color) -> None:
         self.current_color = color
         self.color_preview.set_color(self.current_color)
         self.color_values.set_color(self.current_color)
 
 
     # actions to take after a similar color is picked from the preview
-    def on_similar_color_selected(self, widget, color):
+    def on_similar_color_selected(self, widget, color) -> None:
         self.current_color = color
         self.color_preview.set_color(self.current_color)
         self.color_values.set_color(self.current_color)
@@ -114,7 +127,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     # actions to take after a color is updated from the RGB editor
-    def on_color_edited(self, widget, color):
+    def on_color_edited(self, widget, color) -> None:
         self.current_color = color.copy()
         self.color_preview.set_color(self.current_color)
         self.color_values.set_color(self.current_color)
@@ -122,7 +135,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     # change the cursor icon to pick color icon
-    def set_picker_cursor(self):
+    def set_picker_cursor(self) -> None:
         surface = self.get_surface()
         if not surface:
             return
@@ -132,35 +145,35 @@ class MainWindow(Gtk.ApplicationWindow) :
     
     
     # set the cursor icon to the default
-    def reset_cursor(self):
+    def reset_cursor(self) -> None:
         surface = self.get_surface()
         if surface:
             surface.set_cursor(None)
 
 
     # open the hex editor to edit the color
-    def on_edit_hex(self, widget):
+    def on_edit_hex(self, widget) -> None:
         win = HexEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
     # open the rgb editor to edit the color
-    def on_edit_rgb(self, widget):
+    def on_edit_rgb(self, widget) -> None:
         win = RgbEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
     # open the hsl editor to edit the color
-    def on_edit_hsl(self, widget):
+    def on_edit_hsl(self, widget) -> None:
         win = HslEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
     # open the hsv editor to edit the color
-    def on_edit_hsv(self, widget):
+    def on_edit_hsv(self, widget) -> None:
         win = HsvEditorWindow(self.get_application(), self.current_color)
         self.open_color_editor(win)
 
 
     # open a color editor
-    def open_color_editor(self, editor):
+    def open_color_editor(self, editor) -> None:
         editor.connect("color_selected", self.on_color_edited)
         editor.set_transient_for(self)
         editor.set_modal(True)
@@ -168,4 +181,11 @@ class MainWindow(Gtk.ApplicationWindow) :
         editor.present()
 
 
+    def open_hsv_selector(self, widget) -> None:
+        win = HSVPickerWindow(self.get_application())
+        win.connect("color_selected", self.on_color_edited)
+        win.set_transient_for(self)
+        win.set_modal(True)
+        win.set_destroy_with_parent(True)
+        win.present()
     

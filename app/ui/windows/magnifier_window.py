@@ -6,8 +6,7 @@ from gi.repository import Gtk, Gdk, GLib
 from app.utils.backend import Backend
 from app.ui.widgets.crosshair import Crosshair
 from app.utils.color import Color
-from app.ui.widgets.color_view import ColorView
-from app.ui.widgets.color_view import ColorViewType
+from app.ui.widgets.color_view import ColorView, ColorViewType
 
 
 class MagnifierWindow(Gtk.Window):
@@ -151,7 +150,7 @@ class MagnifierWindow(Gtk.Window):
 
         # --- update crosshair ---
         self.picture.set_size_request(size, size)
-        self.crosshair.set_size_request(size, size)
+        self.crosshair.set_position(size/2, size/2)
 
         # --- update current color ---
         try:

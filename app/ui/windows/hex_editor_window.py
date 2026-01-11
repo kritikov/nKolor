@@ -1,7 +1,6 @@
 from gi.repository import Gtk, GObject
 from app.utils.color import Color
-from app.ui.widgets.color_view import ColorView
-from app.ui.widgets.color_view import ColorViewType
+from app.ui.widgets.color_view import ColorView, ColorViewType
 from app.ui.widgets.slider_editor import SliderEditor
 from app.ui.widgets.slider_editor import SliderEditorFormat
 

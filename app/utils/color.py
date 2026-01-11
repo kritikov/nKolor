@@ -53,13 +53,13 @@ class Color:
 
     @property
     def rgb(self) -> Tuple[float, float, float]:
-        r, g, b = self.hsv_to_rgb(self.h, self.s, self.v)
+        r, g, b = Color.hsv_to_rgb(self.h, self.s, self.v)
         return r, g, b
 
     @property
     def rgb_normalized(self) -> Tuple[float, float, float]:
         r, g, b = self.rgb
-        return self.rgb_to_rgb_normalized(r, g, b)
+        return Color.rgb_to_rgb_normalized(r, g, b)
 
     @property
     def rgb_text(self) -> Tuple[float, float, float]:
@@ -125,7 +125,7 @@ class Color:
     def rgb_to_hsv(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
 
         # 1. normalize RGB
-        r_n, g_n, b_n = self.rgb_to_rgb_normalized(r, g, b)
+        r_n, g_n, b_n = Color.rgb_to_rgb_normalized(r, g, b)
 
         c_max = max(r_n, g_n, b_n)
         c_min = min(r_n, g_n, b_n)
@@ -154,7 +154,7 @@ class Color:
 
     # convert rgb values to hsl values
     def rgb_to_hsl(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
-        r_n, g_n, b_n = self.rgb_to_rgb_normalized(r, g, b)
+        r_n, g_n, b_n = Color.rgb_to_rgb_normalized(r, g, b)
 
         c_max = max(r_n, g_n, b_n)
         c_min = min(r_n, g_n, b_n)
@@ -185,16 +185,23 @@ class Color:
 
 
     # normalize rgb values
-    def rgb_to_rgb_normalized(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
+    @staticmethod
+    def rgb_to_rgb_normalized(r: float, g: float, b: float) -> Tuple[float, float, float]:
         r_n = r / 255.0
         g_n = g / 255.0
         b_n = b / 255.0
-
+        return r_n, g_n, b_n
+    
+    @staticmethod
+    def hsv_to_rgb_normalized(h: float, s: float, v: float) -> Tuple[float, float, float]:
+        r, g, b = Color.hsv_to_rgb(h, s, v)
+        r_n, g_n, b_n = Color.rgb_to_rgb_normalized(r, g, b)
         return r_n, g_n, b_n
     
 
     # convert hsv values to rgb values
-    def hsv_to_rgb(self, h: float, s: float, v: float) -> Tuple[float, float, float]:
+    @staticmethod
+    def hsv_to_rgb(h: float, s: float, v: float) -> Tuple[float, float, float]:
         
         if s == 0.0:
             # γκρι / μαύρο / άσπρο
@@ -268,10 +275,10 @@ class Color:
         clamp = lambda x: max(0.0, min(1.0, x))
 
         variants = [
-            Color(*self.hsv_to_rgb(h, clamp(s), clamp(v + LIGHT_DELTA))),  # lighter
-            Color(*self.hsv_to_rgb(h, clamp(s), clamp(v - LIGHT_DELTA))),  # darker
-            Color(*self.hsv_to_rgb(h, clamp(s - SAT_DELTA), clamp(v))),    # less saturated
-            Color(*self.hsv_to_rgb(h, clamp(s + SAT_DELTA), clamp(v))),    # more saturated
+            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v + LIGHT_DELTA))),  # lighter
+            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v - LIGHT_DELTA))),  # darker
+            Color(*Color.hsv_to_rgb(h, clamp(s - SAT_DELTA), clamp(v))),    # less saturated
+            Color(*Color.hsv_to_rgb(h, clamp(s + SAT_DELTA), clamp(v))),    # more saturated
         ]
 
         return tuple(variants)

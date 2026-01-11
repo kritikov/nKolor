@@ -1,18 +1,28 @@
 from gi.repository import Gtk
 
 class Crosshair(Gtk.DrawingArea):
+
     def __init__(self):
         super().__init__()
+
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.light_color = (255, 255, 255, 1)  
         self.dark_color = (0, 0, 0, 1)  
 
+        self.cx = 0
+        self.cy = 0
+
         self.set_draw_func(self.draw)
 
+    def set_position(self, x, y):
+        self.cx = x
+        self.cy = y
+        self.queue_draw()
+
     def draw(self, area, cr, width, height):
-        cx = width / 2
-        cy = height / 2
+        cx = self.cx
+        cy = self.cy
         size = 12
         internal_radious = 4
 
