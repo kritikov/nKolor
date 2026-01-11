@@ -10,17 +10,16 @@ class SVSelector(Gtk.Overlay):
         "sv-changed": (GObject.SignalFlags.RUN_FIRST, None, (float, float)),  # saturation, value
     }
 
-    def __init__(self, width=256, height=256, hue=0.0, s=0.0, v=1.0):
+    def __init__(self, width=256, height=256, hue=0.0, saturation=0.0, value=1.0):
         super().__init__()
 
         self.set_size_request(width, height)
 
         self.width = width
         self.height = height
-
         self.hue = hue
-        self.saturation = s
-        self.value = v
+        self.saturation = saturation
+        self.value = value
 
         # Surface for gradient
         self.sv_surface = None

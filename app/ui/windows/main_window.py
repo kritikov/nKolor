@@ -182,7 +182,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
 
     def open_hsv_selector(self, widget) -> None:
-        win = HSVPickerWindow(self.get_application())
+        win = HSVPickerWindow(self.get_application(), self.current_color)
         win.connect("color_selected", self.on_color_edited)
         win.set_transient_for(self)
         win.set_modal(True)

@@ -2,7 +2,7 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, GObject
 from app.utils.color import Color
-from app.ui.widgets.crosshair import Crosshair
+from app.ui.widgets.sv_selector import SVSelector
 from app.ui.widgets.hue_slider import HueSlider
 from app.ui.widgets.color_view import ColorView, ColorViewType
 import colorsys, cairo
@@ -14,16 +14,13 @@ class HSVPickerWindow(Gtk.Window):
         "color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
-    def __init__(self, app: Gtk.Application):
+    def __init__(self, app: Gtk.Application, color: Color):
         super().__init__(title="HSV Picker")
 
         self.set_default_size(360, 280)
-        self.hue = 0.0
-        self.saturation = 0.0
-        self.value = 1.0
-
-        rgb = Color.hsv_to_rgb(self.hue, self.saturation, self.value)
-        self.color = Color(*rgb)
+       
+        self.color = color.copy()
+        self.hue, self.saturation, self.value = color.hsv
 
         self.sv_surface = None
 
@@ -41,27 +38,9 @@ class HSVPickerWindow(Gtk.Window):
         root_child.append(second_row)
 
         # 2D HSV area
-        hs_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        overlay = Gtk.Overlay()
-        hs_box.append(overlay)
-        first_row.append(hs_box)
-
-        self.sv_area = Gtk.DrawingArea()
-        self.sv_area.set_content_width(256)
-        self.sv_area.set_content_height(256)
-        self.sv_area.set_draw_func(self.draw_sv)
-        self.rebuild_sv_surface()
-        overlay.set_child(self.sv_area)
-
-        self.crosshair = Crosshair()
-        self.crosshair.set_position(0, 0)
-        self.crosshair.set_can_target(False)
-        overlay.add_overlay(self.crosshair)
-
-        gesture = Gtk.GestureDrag()
-        gesture.connect("drag-begin", self.on_drag_begin)
-        gesture.connect("drag-update", self.on_drag_update)
-        self.sv_area.add_controller(gesture)
+        self.hs_selector = SVSelector(hue=self.hue, saturation=self.saturation, value=self.value)
+        self.hs_selector.connect("sv-changed", self.on_sv_changed)
+        first_row.append(self.hs_selector)
 
         # hue slider
         self.hue_slider = HueSlider(initial_hue=self.hue)
@@ -85,83 +64,34 @@ class HSVPickerWindow(Gtk.Window):
         second_row.append(buttons)
 
 
-    # fill the hs area with colors
-    def draw_sv(self, area, cr, width, height):
-        if self.sv_surface:
-            cr.set_source_surface(self.sv_surface, 0, 0)
-            cr.paint()
-
-
-    # ================= EVENTS =================
-
-    def on_drag_begin(self, gesture, start_x, start_y)->None:
-        self.drag_start_x = start_x
-        self.drag_start_y = start_y
-        self.crosshair.set_position(start_x, start_y)
-
-
-    def on_drag_update(self, gesture, offset_x, offset_y):
-        abs_x = self.drag_start_x + offset_x
-        abs_y = self.drag_start_y + offset_y
-
-        alloc = self.sv_area.get_allocation()
-        abs_x = max(0, min(abs_x, alloc.width))
-        abs_y = max(0, min(abs_y, alloc.height))
-
-        # S: αριστερά → δεξιά (0 → 1)
-        self.saturation = abs_x / alloc.width
-
-        # V: πάνω → κάτω (1 → 0)
-        self.value = 1.0 - (abs_y / alloc.height)
-
-        self.crosshair.set_position(abs_x, abs_y)
+    # actions when we select values from the sv area
+    def on_sv_changed(self, widget, s, v)->None:
+        self.saturation = s
+        self.value = v
         self.update_color()
 
 
+    # actions to take when we the hue value is changed from the slider
+    def on_hue_changed(self, widget, hue):
+        self.hue = hue
+        self.hs_selector.set_hue(self.hue)
+        self.update_color()
 
 
+    # update the selected color from the stored values of the widget
     def update_color(self)->None:
         rgb = Color.hsv_to_rgb(self.hue, self.saturation, self.value)
         self.color.rgb = rgb
         self.color_preview.set_color(self.color)
-        
 
 
+    # select color and close the window
     def on_apply_color(self, *_)->None:
         self.emit("color_selected", self.color)
         self.close()
 
 
-    def on_hue_changed(self, widget, hue):
-        self.hue = hue
-        self.rebuild_sv_surface()
-        self.sv_area.queue_draw()
-        self.update_color()
+    
 
 
-    def rebuild_sv_surface(self):
-        w = h = 256
-        surface = cairo.ImageSurface(cairo.FORMAT_RGB24, w, h)
-        cr = cairo.Context(surface)
-
-        # --- Saturation gradient (X)
-        r, g, b = Color.hsv_to_rgb_normalized(self.hue, 1, 1)
-        sat_grad = cairo.LinearGradient(0, 0, w, 0)
-        sat_grad.add_color_stop_rgb(0, 1, 1, 1)       # S=0 → white
-        sat_grad.add_color_stop_rgb(1, r, g, b)       # S=1 → hue
-
-        cr.set_source(sat_grad)
-        cr.rectangle(0, 0, w, h)
-        cr.fill()
-
-        # --- Value gradient (Y)
-        val_grad = cairo.LinearGradient(0, 0, 0, h)
-        val_grad.add_color_stop_rgba(0, 0, 0, 0, 0)   # V=1
-        val_grad.add_color_stop_rgba(1, 0, 0, 0, 1)   # V=0
-
-        cr.set_source(val_grad)
-        cr.rectangle(0, 0, w, h)
-        cr.fill()
-
-        self.sv_surface = surface
 
