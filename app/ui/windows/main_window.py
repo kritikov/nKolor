@@ -23,7 +23,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.set_title("nKolor")
         self.set_default_size(500, 220)
         self.set_resizable(False) 
-        self.current_color = Color(255, 0, 0) # initial color
+        self.current_color = Color(50, 180, 150) # initial color
         self.magnifier = MagnifierWindow()
 
         self.build_ui()
@@ -59,7 +59,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         hsv_selector_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
         hsv_selector_icon = Gtk.Image.new_from_file("app/resources/icons/color-wheel.png")
         hsv_selector_btn.set_child(hsv_selector_icon);
-        hsv_selector_btn.set_tooltip_text("copy to clipboard")
+        hsv_selector_btn.set_tooltip_text("select from HSV picker")
         hsv_selector_btn.connect("clicked", self.open_hsv_selector)
         left_col_buttons.append(hsv_selector_btn)
 
