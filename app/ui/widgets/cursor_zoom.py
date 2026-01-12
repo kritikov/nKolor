@@ -7,7 +7,7 @@ from PIL import Image
 import io
 
 class ZoomPreview(Gtk.Window):
-    def __init__(self, main_window, zoom=5, size=120):
+    def __init__(self, main_window, zoom:int=5, size:int=120):
         super().__init__()
         self.main_window = main_window
         self.zoom = zoom
@@ -36,7 +36,7 @@ class ZoomPreview(Gtk.Window):
 
         self.timeout_id = GLib.timeout_add(30, self.update_preview)
 
-    def update_preview(self):
+    def update_preview(self)-> None:
         data = self.root.query_pointer()
         x, y = data.root_x, data.root_y
 
@@ -66,19 +66,3 @@ class ZoomPreview(Gtk.Window):
 
         return True
 
-# Παράδειγμα κύριου παραθύρου
-class MainWindow(Gtk.Window):
-    def __init__(self):
-        super().__init__(title="Main Window")
-        self.set_default_size(400, 300)
-        self.show()
-
-        self.zoom_preview = ZoomPreview(self)
-
-if __name__ == "__main__":
-    app = Gtk.Application()
-    def on_activate(application):
-        win = MainWindow()
-        win.set_application(application)
-    app.connect("activate", on_activate)
-    app.run(None)

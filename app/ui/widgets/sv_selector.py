@@ -55,21 +55,21 @@ class SVSelector(Gtk.Overlay):
         self.rebuild_surface()
 
 
-    def on_drag_begin(self, gesture, start_x, start_y):
+    def on_drag_begin(self, gesture, start_x, start_y)-> None:
         self.colors_area.grab_focus()
         self.drag_start_x = start_x
         self.drag_start_y = start_y
         self.update_color_from_sv_position(start_x, start_y)
 
 
-    def on_drag_update(self, gesture, offset_x, offset_y):
+    def on_drag_update(self, gesture, offset_x, offset_y)-> None:
         abs_x = self.drag_start_x + offset_x
         abs_y = self.drag_start_y + offset_y
         self.update_color_from_sv_position(abs_x, abs_y)
 
 
     # move the pointer in the colors area using the keyboard
-    def on_key_pressed(self, controller, keyval, keycode, state):
+    def on_key_pressed(self, controller, keyval, keycode, state)-> None:
         step = 0.01  
 
         if keyval == Gdk.KEY_Left:
@@ -89,14 +89,14 @@ class SVSelector(Gtk.Overlay):
 
 
     # the drawing function of the colors area
-    def on_draw(self, area, cr, width, height):
+    def on_draw(self, area, cr, width:int, height:int)-> None:
         if self.sv_surface:
             cr.set_source_surface(self.sv_surface, 0, 0)
             cr.paint()
 
 
    # Rebuild the SV surface based on the current hue
-    def rebuild_surface(self):
+    def rebuild_surface(self)-> None:
         w, h = self.width, self.height
         surface = cairo.ImageSurface(cairo.FORMAT_RGB24, w, h)
         cr = cairo.Context(surface)
@@ -123,7 +123,7 @@ class SVSelector(Gtk.Overlay):
 
 
     # update the pointer position
-    def update_crosshair_position(self):
+    def update_crosshair_position(self)-> None:
         x = self.saturation * self.width
         y = (1.0 - self.value) * self.height
         self.crosshair.set_position(x, y)
@@ -131,7 +131,7 @@ class SVSelector(Gtk.Overlay):
 
 
     # update the color from the coordinates
-    def update_color_from_sv_position(self, x, y):
+    def update_color_from_sv_position(self, x:float, y:float)-> None:
         x = max(0, min(x, self.width))
         y = max(0, min(y, self.height))
 
@@ -143,14 +143,14 @@ class SVSelector(Gtk.Overlay):
 
     
     # update the widget setting the hue       
-    def set_hue(self, hue: float):
+    def set_hue(self, hue: float)-> None:
         self.hue = hue
         self.rebuild_surface()
         self.update_crosshair_position()
 
 
     # update the widget setting the saturation and the value  
-    def set_sv(self, s: float, v: float):
+    def set_sv(self, s: float, v: float)-> None:
         self.saturation = s
         self.value = v
         self.update_crosshair_position()

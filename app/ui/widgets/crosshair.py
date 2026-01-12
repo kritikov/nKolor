@@ -15,12 +15,12 @@ class Crosshair(Gtk.DrawingArea):
 
         self.set_draw_func(self.draw)
 
-    def set_position(self, x, y):
+    def set_position(self, x:int, y:int)-> None:
         self.cx = x
         self.cy = y
         self.queue_draw()
 
-    def draw(self, area, cr, width, height):
+    def draw(self, area, cr, width: int, height: int)-> None:
         cx = self.cx
         cy = self.cy
         size = 12

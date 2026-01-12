@@ -72,7 +72,7 @@ class HueSlider(Gtk.Box):
 
 
     # slider event 
-    def on_scale_changed(self, scale):
+    def on_scale_changed(self, scale)-> None:
         self.hue = scale.get_value()
         self.colors_area.queue_draw()
         self.emit("hue_changed", self.hue)

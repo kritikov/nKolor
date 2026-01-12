@@ -44,18 +44,18 @@ class ColorView(Gtk.DrawingArea):
             motion.connect("leave", self.on_mouse_leave)
             self.add_controller(motion)
 
-    def on_mouse_enter(self, *args):
+    def on_mouse_enter(self, *args)-> None:
         cursor = Gdk.Cursor.new_from_name("pointer")
         self.set_cursor(cursor)  
         return True
 
-    def on_mouse_leave(self, *args):
+    def on_mouse_leave(self, *args)-> None:
         self.set_cursor(None) 
         return True  
 
 
     # fill the contents of the widget with a custom draw
-    def on_draw(self, widget, cr, width, height):
+    def on_draw(self, widget, cr, width:float, height:float)-> None:
         width = widget.get_allocated_width()
         height = widget.get_allocated_height()
 
@@ -95,13 +95,13 @@ class ColorView(Gtk.DrawingArea):
     
 
     # Set the color of the widget
-    def set_color(self, color: Color):
+    def set_color(self, color: Color)-> None:
         self.color = color
         self.queue_draw()
 
 
     # signal when the widget is clicked
-    def on_clicked(self, gesture, n_press, x, y):
+    def on_clicked(self, gesture, n_press, x, y)-> None:
         self.emit("clicked", self.color)
 
 

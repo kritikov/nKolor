@@ -3,7 +3,7 @@ from typing import Tuple
 class Color:
 
     def __init__(self, r: float = 255, g: float = 255, b: float = 255):
-        self.h, self.s, self.v = self.rgb_to_hsv(r, g, b)   # h, s, v in [0,1]
+        self.h, self.s, self.v = Color.rgb_to_hsv(r, g, b)   # h, s, v in [0,1]
 
 
     # Equality check based on RGB
@@ -72,7 +72,7 @@ class Color:
 
     @rgb.setter
     def rgb(self, value: Tuple[float, float, float]):
-        self.h, self.s, self.v = self.rgb_to_hsv(*value)
+        self.h, self.s, self.v = Color.rgb_to_hsv(*value)
 
 
     @property
@@ -80,23 +80,11 @@ class Color:
         r, g, b = self.rgb
         return f"#{int(round(r)):02X}{int(round(g)):02X}{int(round(b)):02X}"
 
-    # @hex.setter
-    # def hex(self, value: str):
-    #     """
-    #     value: string όπως "#RRGGBB" ή "RRGGBB"
-    #     """
-    #     value = value.lstrip("#")
-    #     r = int(value[0:2], 16)
-    #     g = int(value[2:4], 16)
-    #     b = int(value[4:6], 16)
-    #     # ενημέρωση HSV source-of-truth
-    #     self.h, self.s, self.v = self.rgb_to_hsv(r, g, b)
 
-   
     @property
     def hsl(self) -> Tuple[float, float, float]:
         r, g, b = self.rgb
-        return self.rgb_to_hsl(r, g, b)
+        return Color.rgb_to_hsl(r, g, b)
     
     @property
     def hsl_text(self) -> str:
@@ -117,7 +105,7 @@ class Color:
         h = h_deg / 360
         s = s_pct / 100
         l = l_pct / 100
-        r, g, b = self.hsl_to_rgb(h, s, l)
+        r, g, b = Color.hsl_to_rgb(h, s, l)
         self.rgb = r, g, b
 
 
@@ -125,8 +113,30 @@ class Color:
     # methods
     # ------------------
 
+    # get similar colors
+    def get_variants(self) -> Tuple["Color", "Color", "Color", "Color"]:
+        h, s, v = self.hsv  # source-of-truth HSV
+
+        LIGHT_DELTA = 0.15
+        SAT_DELTA = 0.25
+
+        # helper για clamp
+        clamp = lambda x: max(0.0, min(1.0, x))
+
+        variants = [
+            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v + LIGHT_DELTA))),  # lighter
+            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v - LIGHT_DELTA))),  # darker
+            Color(*Color.hsv_to_rgb(h, clamp(s - SAT_DELTA), clamp(v))),    # less saturated
+            Color(*Color.hsv_to_rgb(h, clamp(s + SAT_DELTA), clamp(v))),    # more saturated
+            # Color(*Color.hsv_to_rgb((h + 0.5) % 1.0, clamp(s), clamp(v))),  # complementary
+        ]
+
+        return tuple(variants)
+    
+    
     # convert rgb values to hsv values
-    def rgb_to_hsv(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
+    @staticmethod
+    def rgb_to_hsv(r: float, g: float, b: float) -> Tuple[float, float, float]:
 
         # 1. normalize RGB
         r_n, g_n, b_n = Color.rgb_to_rgb_normalized(r, g, b)
@@ -157,7 +167,8 @@ class Color:
 
 
     # convert rgb values to hsl values
-    def rgb_to_hsl(self, r: float, g: float, b: float) -> Tuple[float, float, float]:
+    @staticmethod
+    def rgb_to_hsl(r: float, g: float, b: float) -> Tuple[float, float, float]:
         r_n, g_n, b_n = Color.rgb_to_rgb_normalized(r, g, b)
 
         c_max = max(r_n, g_n, b_n)
@@ -240,7 +251,8 @@ class Color:
 
 
     # convert hsv values to rgb values
-    def hsl_to_rgb(self, h: float, s: float, l: float) -> Tuple[float, float, float]:
+    @staticmethod
+    def hsl_to_rgb(h: float, s: float, l: float) -> Tuple[float, float, float]:
         if s == 0.0:
             # grayscale
             r = g = b = l * 255
@@ -268,45 +280,9 @@ class Color:
         return r, g, b
 
 
-    # get similar colors
-    def get_variants(self) -> Tuple["Color", "Color", "Color", "Color"]:
-        h, s, v = self.hsv  # source-of-truth HSV
-
-        LIGHT_DELTA = 0.15
-        SAT_DELTA = 0.25
-
-        # helper για clamp
-        clamp = lambda x: max(0.0, min(1.0, x))
-
-        variants = [
-            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v + LIGHT_DELTA))),  # lighter
-            Color(*Color.hsv_to_rgb(h, clamp(s), clamp(v - LIGHT_DELTA))),  # darker
-            Color(*Color.hsv_to_rgb(h, clamp(s - SAT_DELTA), clamp(v))),    # less saturated
-            Color(*Color.hsv_to_rgb(h, clamp(s + SAT_DELTA), clamp(v))),    # more saturated
-        ]
-
-        return tuple(variants)
+    
 
 
 
     
-
-    #@hex.setter
-    # def hex(self, value: str):
-    #     value = value.lstrip("#")
-    #     if len(value) != 6:
-    #         raise ValueError(f"Invalid hex: {value}")
-    #     self.r, self.g, self.b = tuple(int(value[i:i+2], 16) for i in (0, 2, 4))
-
-
-    # -------------------------------
-    # Helpers
-    # -------------------------------
-    # def complementary(self) -> "Color":
-    #     return Color(255 - self.r, 255 - self.g, 255 - self.b)
-
-    # def brightness(self) -> float:
-    #     """0..1"""
-    #     return (0.299*self.r + 0.587*self.g + 0.114*self.b) / 255
-
 

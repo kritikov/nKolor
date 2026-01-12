@@ -14,7 +14,7 @@ class ColorValueBar(Gtk.Box):
         self.build_ui(title, value)
         
 
-    def build_ui(self, title: str, value: str):
+    def build_ui(self, title: str, value: str)-> None:
         title_lbl = Gtk.Label(label=f"{title}:")
         title_lbl.set_size_request(50, -1)
         title_lbl.set_xalign(0)
@@ -50,12 +50,12 @@ class ColorValueBar(Gtk.Box):
 
 
     # copy the value in the clipboard
-    def copy_to_clipboard(self, *_):
+    def copy_to_clipboard(self, *_)-> None:
         clipboard = Gdk.Display.get_default().get_clipboard()
         clipboard.set(self.value_entry.get_text())
         self.emit("copy")
 
 
     # set the value
-    def set_value(self, value: str):
+    def set_value(self, value: str)-> None:
         text = self.value_entry.set_text(value)

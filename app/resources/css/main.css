@@ -23,6 +23,14 @@ entry:focus-visible {
     min-width: 50px;
     min-height: 50px;
 }
+.info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0px;
+    min-width: 25px;
+    min-height: 25px;
+}
 
 .value-bar {
     padding: 0px;
@@ -50,6 +58,12 @@ entry:focus-visible {
 
 .magnifier-window{
     border: 1px solid gray;
+}
+
+.about-title{
+    font-weight: bold;
+    font-size: 2em;
+    color: #260755;
 }
 
 

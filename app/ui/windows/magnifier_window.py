@@ -9,7 +9,7 @@ from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView, ColorViewType
 
 
-class MagnifierWindow(Gtk.Window):
+class MagnifierWindow(Gtk.ApplicationWindow):
     def __init__(self):
         super().__init__()
 
@@ -31,7 +31,7 @@ class MagnifierWindow(Gtk.Window):
         self.buid_ui()
 
 
-    def buid_ui(self):
+    def buid_ui(self)->None:
         root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=0)
         root_child.add_css_class("magnifier-window")
         self.set_child(root_child)
@@ -52,11 +52,11 @@ class MagnifierWindow(Gtk.Window):
 
 
     # update the preview color
-    def update_color_preview(self):
+    def update_color_preview(self)->None:
         self.color_preview.set_color(self.current_color)
         
 
-    def start(self):
+    def start(self)->None:
         if self.running:
             return
 
@@ -77,7 +77,7 @@ class MagnifierWindow(Gtk.Window):
 
     # -------------------------------------------------
 
-    def tick(self):
+    def tick(self)->None:
         if not self.running:
             return False
 

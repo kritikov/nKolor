@@ -18,7 +18,7 @@ class ColorPreview(Gtk.Box):
         self.build_ui()
 
 
-    def build_ui(self):
+    def build_ui(self)-> None:
         self.preview = ColorView(80, 80, self.color, ColorViewType.SQUARE, False)
         self.append(self.preview)
 
@@ -49,11 +49,16 @@ class ColorPreview(Gtk.Box):
         self.similar_color_4.set_tooltip_text("more saturated")
         similar_colors.append(self.similar_color_4)
 
+        # self.similar_color_5 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        # self.similar_color_5.connect("clicked", self.on_similar_color_select)
+        # self.similar_color_5.set_tooltip_text("complementary")
+        # similar_colors.append(self.similar_color_5)
+
         self.append(similar_colors)
 
 
     # change the color of the preview and the similar colors
-    def set_color(self, color: Color):
+    def set_color(self, color: Color)-> None:
         self.preview.set_color(color)
 
         variants = color.get_variants()
@@ -61,9 +66,10 @@ class ColorPreview(Gtk.Box):
         self.similar_color_2.set_color(variants[1])
         self.similar_color_3.set_color(variants[2])
         self.similar_color_4.set_color(variants[3])
+        # self.similar_color_5.set_color(variants[4])
 
 
     # signal when a similar color is selected
-    def on_similar_color_select(self, widget, color):
+    def on_similar_color_select(self, widget, color: Color)-> None:
         self.emit("similar_color_selected", color)
  

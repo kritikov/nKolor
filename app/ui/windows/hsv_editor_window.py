@@ -1,4 +1,4 @@
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, Gdk, GObject
 from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView, ColorViewType
 from app.ui.widgets.slider_editor import SliderEditor
@@ -19,7 +19,12 @@ class HsvEditorWindow(Gtk.ApplicationWindow):
         self.color = color.copy()
         self.build_ui()
 
-    def build_ui(self):
+        # Key controller για ESC
+        key_controller = Gtk.EventControllerKey()
+        key_controller.connect("key-pressed", self.on_key_pressed)
+        self.add_controller(key_controller)
+
+    def build_ui(self)->None:
         root_child = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
@@ -60,30 +65,39 @@ class HsvEditorWindow(Gtk.ApplicationWindow):
         bottom_row.append(buttons)
 
 
-    def on_hue_changed(self, widget, new_value):
+    def on_hue_changed(self, widget, new_value:int)->None:
         hue, saturation, value = self.color.hsv_for_ui
         hue = new_value
         self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
-    def on_saturation_changed(self, widget, new_value):
+    def on_saturation_changed(self, widget, new_value:int)->None:
         hue, saturation, value = self.color.hsv_for_ui
         saturation = new_value
         self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
-    def on_value_changed(self, widget, new_value):
+    def on_value_changed(self, widget, new_value:int)->None:
         hue, saturation, value = self.color.hsv_for_ui
         value = new_value
         self.color.hsv_for_ui = hue, saturation, value
         self.update_preview()
 
-    def update_preview(self):
+    def update_preview(self)->None:
         self.color_preview.set_color(self.color)
 
-    def on_apply_color(self, *_):
+    def on_apply_color(self, *_)->None:
         self.emit("color_selected", self.color)
         self.close()
 
 
+    def on_key_pressed(self, controller, keyval, keycode, state):
+        if keyval == Gdk.KEY_Escape:
+            self.close()
+            return True
+        elif keyval == Gdk.KEY_Return or keyval == Gdk.KEY_KP_Enter:
+            self.emit("color_selected", self.color)
+            self.close()
+            return True
+        return False
     

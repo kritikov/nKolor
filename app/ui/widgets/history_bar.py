@@ -32,7 +32,7 @@ class HistoryBar(Gtk.ScrolledWindow):
         self.build_ui()
         
 
-    def build_ui(self):
+    def build_ui(self)-> None:
         self.colors_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             spacing=8
@@ -42,14 +42,14 @@ class HistoryBar(Gtk.ScrolledWindow):
         self.add_css_class("history_bar")
 
     # add a color in the history
-    def add_color(self, color: Color):
+    def add_color(self, color: Color)-> None:
         self.adjust_widgets_size()
         self.colors.append(color)
         self.add_color_widget(color)
 
 
     # if colors in history are full then remove the first widget
-    def adjust_widgets_size(self):
+    def adjust_widgets_size(self)-> None:
         if len(self.colors) == self.colors.maxlen:
             first_child = self.colors_box.get_first_child()
             if first_child:
@@ -57,12 +57,12 @@ class HistoryBar(Gtk.ScrolledWindow):
 
 
     # add a widget in the history based on a color
-    def add_color_widget(self, color):
+    def add_color_widget(self, color:Color)-> None:
         circle = ColorView(28, 28, color, ColorViewType.CIRCLE)
         circle.connect("clicked", self.on_color_select)
         self.colors_box.prepend(circle)
 
 
     # signal when a color is selected
-    def on_color_select(self, widget, color):
+    def on_color_select(self, widget, color:Color)-> None:
         self.emit("color_selected", color)

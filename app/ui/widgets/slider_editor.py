@@ -31,7 +31,7 @@ class SliderEditor(Gtk.Box):
         self.build_ui()
 
 
-    def build_ui(self):
+    def build_ui(self)-> None:
 
         # label
         label = Gtk.Label(label=self.title)
@@ -80,7 +80,7 @@ class SliderEditor(Gtk.Box):
 
 
     # actions to do when the value of the slider changed
-    def on_slider_input_changed(self, adjustment):
+    def on_slider_input_changed(self, adjustment)-> None:
         value = int(adjustment.get_value())
         if value == self.value:
             return
@@ -112,7 +112,7 @@ class SliderEditor(Gtk.Box):
         
 
     # actions to do when the value of the text input changed
-    def on_text_input_set_value(self, widget):
+    def on_text_input_set_value(self, widget)-> None:
         text = self.text_input.get_text()
         numeric_value = self.numeric_text(text)
 

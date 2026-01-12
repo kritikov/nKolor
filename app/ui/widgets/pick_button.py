@@ -28,7 +28,7 @@ class PickButton(Gtk.Frame):
         self.add_controller(controller)
 
 
-    def on_event(self, controller, event):
+    def on_event(self, controller, event)-> None:
         event = controller.get_current_event()
         if event is None:
             return
