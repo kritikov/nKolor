@@ -50,6 +50,10 @@ class Color:
         self.s = s_pct / 100
         self.v = v_pct / 100
 
+    @hsv.setter
+    def hsv(self, value: Tuple[float, float, float]):
+        self.h, self.s, self.v = value
+
 
     @property
     def rgb(self) -> Tuple[float, float, float]:

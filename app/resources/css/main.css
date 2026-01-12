@@ -5,11 +5,11 @@ window {
 
 button:focus-visible, 
 scale:focus-visible, 
+.focusable-widget:focus-visible,
 entry:focus-visible {
   outline: 1px solid rgb(231, 12, 12);
   outline-offset: 0px;
 }
-
 
 .window-root-child{
     margin: 15px;
@@ -51,6 +51,8 @@ entry:focus-visible {
 .magnifier-window{
     border: 1px solid gray;
 }
+
+
 
 
 
