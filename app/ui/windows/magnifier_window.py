@@ -1,12 +1,16 @@
-import gi
+import gi, os
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
 from gi.repository import Gtk, Gdk, GLib
-from app.utils.backend import Backend
 from app.ui.widgets.crosshair import Crosshair
 from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView, ColorViewType
+
+if os.environ.get("WAYLAND_DISPLAY"):
+    from app.utils.backend import BackendWayland as Backend
+else:
+    from app.utils.backend import BackendX11 as Backend
 
 
 class MagnifierWindow(Gtk.ApplicationWindow):
@@ -14,7 +18,7 @@ class MagnifierWindow(Gtk.ApplicationWindow):
         super().__init__()
 
         self.backend = Backend()
-        self.current_color = Color(255, 255, 255)  # default white
+        self.current_color = Color()
         self.capture_size = 30
         self.magnification = 5
         self.offset = 20
@@ -36,15 +40,16 @@ class MagnifierWindow(Gtk.ApplicationWindow):
         root_child.add_css_class("magnifier-window")
         self.set_child(root_child)
 
-        # color preview area
+        # color preview
         self.color_preview = ColorView(self.size, 25, self.current_color, ColorViewType.SQUARE)
         root_child.append(self.color_preview)
 
         # zoom area
         zoom = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         overlay = Gtk.Overlay()
-        self.picture = Gtk.Picture()
-        overlay.set_child(self.picture)
+        self.background = Gtk.Picture()
+        self.background.set_size_request(self.size, self.size)
+        overlay.set_child(self.background)
         self.crosshair = Crosshair()
         overlay.add_overlay(self.crosshair)
         zoom.append(overlay)
@@ -52,113 +57,78 @@ class MagnifierWindow(Gtk.ApplicationWindow):
 
 
     # update the preview color
-    def update_color_preview(self)->None:
+    def update_preview(self)->None:
         self.color_preview.set_color(self.current_color)
         
 
+    # display the window and start scanning the surface of the screen
     def start(self)->None:
         if self.running:
             return
 
         self.running = True
         self.show()
-
-        surface = self.get_surface()
-        xid = surface.get_xid()
-
-        self.backend.bind_window(xid)
+        self.backend.bind_window(self)
         self.backend.set_window_on_top()
 
         GLib.timeout_add(16, self.tick)
 
+
+    # close the window and stop scanning the surface of the screen
     def stop(self):
         self.running = False
         self.hide()
 
-    # -------------------------------------------------
 
-    def tick(self)->None:
+    # actions to take in every frame
+    def tick(self)-> bool:
         if not self.running:
             return False
 
-        # --- screen info ---
-        screen_w = self.backend.screen_width()
-        screen_h = self.backend.screen_height()
-        win_w = int(self.capture_size * self.magnification)
-        win_h = int(self.capture_size * self.magnification)
-        half = self.capture_size // 2
+        mouseX, mouseY = self.backend.get_mouse_position()
 
-        # --- cursor position ---
-        mx, my = self.backend.get_mouse_position()
-
-        # --- calculate capture area (clamped) ---
-        x = mx - half
-        y = my - half
-
-        if x + self.capture_size > screen_w:
-            x = screen_w - self.capture_size
-        if y + self.capture_size > screen_h:
-            y = screen_h - self.capture_size
-        x = max(0, x)
-        y = max(0, y)
-
-        # --- dynamic window offset ---
-        offset_x = self.offset
-        offset_y = self.offset
-
-        if mx + win_w + self.offset > screen_w:
-            offset_x = -win_w - self.offset
-        if my + win_h + self.offset > screen_h:
-            offset_y = -win_h - self.offset
-
-        self.backend.move_window(mx + offset_x, my + offset_y)
-
-        # --- capture image ---
-        img = self.backend.capture_area(x, y, self.capture_size, self.capture_size)
-
-        # --- update texture ---
-        size = int(self.capture_size * self.magnification)
-        if img:
-            try:
-                data = bytes(img.data)
-                texture = Gdk.MemoryTexture.new(
-                    self.capture_size,
-                    self.capture_size,
-                    Gdk.MemoryFormat.B8G8R8A8,
-                    GLib.Bytes.new(data),
-                    self.capture_size * 4
-                )
-                self.picture.set_paintable(texture)
-            except Exception as e:
-                print(f"[Magnifier] update_texture failed: {e}")
-                img = None
-
-        # fallback: solid gray if capture failed
-        if not img:
-            try:
-                fallback_data = bytes([128, 128, 128, 255] * (self.capture_size * self.capture_size))
-                texture = Gdk.MemoryTexture.new(
-                    self.capture_size,
-                    self.capture_size,
-                    Gdk.MemoryFormat.B8G8R8A8,
-                    GLib.Bytes.new(fallback_data),
-                    self.capture_size * 4
-                )
-                self.picture.set_paintable(texture)
-            except Exception as e:
-                print(f"[Magnifier] fallback texture failed: {e}")
-
-        # --- update crosshair ---
-        self.picture.set_size_request(size, size)
-        self.crosshair.set_position(size/2, size/2)
-
-        # --- update current color ---
-        try:
-            r, g, b = self.backend.get_color_under_cursor()
-            self.current_color = Color(r, g, b)
-            self.update_color_preview()
-        except Exception:
-            pass
+        self.backend.move_window(mouseX, mouseY, self.offset, self.offset, self.size)
+        captured_image = self.backend.capture_image(mouseX, mouseY, self.capture_size)
+        self.update_background(captured_image)
+        self.update_cursor()
+        self.update_color()
 
         return True  # continue timeout
 
+
+    # update the position of the cursor
+    def update_cursor(self):
+        self.crosshair.set_position(self.size // 2, self.size // 2)
+    
+
+    # update the color from the pixel under the mouse
+    def update_color(self):
+        try:
+            r, g, b = self.backend.get_color_under_cursor()
+            self.current_color = Color(r, g, b)
+            self.update_preview()
+        except Exception:
+            pass
+
+
+    # update the zoom background from an array of bytes
+    def update_background(self, data: bytes | None) -> bool:
+        try:
+            if data is None:
+                data = bytes(
+                    [128, 128, 128, 255] *
+                    (self.capture_size * self.capture_size)
+                )
+
+            texture = Gdk.MemoryTexture.new(
+                self.capture_size,
+                self.capture_size,
+                Gdk.MemoryFormat.B8G8R8A8,
+                GLib.Bytes.new(data),
+                self.capture_size * 4
+            )
+            self.background.set_paintable(texture)
+            return True
+        except Exception as e:
+            print(f"[Magnifier] texture update failed: {e}")
+            return False

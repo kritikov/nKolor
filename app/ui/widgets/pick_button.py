@@ -14,7 +14,6 @@ class PickButton(Gtk.Frame):
         self.set_hexpand(False)
         self.set_halign(Gtk.Align.START)
         self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
-      
         self.add_css_class("icon-button") 
 
         # icon
@@ -22,7 +21,6 @@ class PickButton(Gtk.Frame):
         icon.set_tooltip_text("prick for screen")
         self.set_child(icon)
 
-         # Legacy controller για όλα τα mouse events
         controller = Gtk.EventControllerLegacy()
         controller.connect("event", self.on_event)
         self.add_controller(controller)

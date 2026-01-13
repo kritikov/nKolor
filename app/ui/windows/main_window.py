@@ -192,7 +192,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
     # open a color editor
     def open_color_editor(self, editor) -> None:
-        editor.connect("color_selected", self.on_color_edited)
+        editor.connect("color_selected", self.on_color_edited)  
         editor.set_transient_for(self)
         editor.set_modal(True)
         editor.set_destroy_with_parent(True)
@@ -216,6 +216,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         win.set_destroy_with_parent(True)
         win.present()
 
+    # close the app when ESC is pressed
     def on_key_pressed(self, controller, keyval, keycode, state):
         if keyval == Gdk.KEY_Escape:
             self.close()
