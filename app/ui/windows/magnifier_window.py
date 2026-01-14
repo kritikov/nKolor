@@ -7,10 +7,10 @@ from app.ui.widgets.crosshair import Crosshair
 from app.utils.color import Color
 from app.ui.widgets.color_view import ColorView, ColorViewType
 
-if os.environ.get("WAYLAND_DISPLAY"):
-    from app.utils.backend import BackendWayland as Backend
-else:
-    from app.utils.backend import BackendX11 as Backend
+# if os.environ.get("WAYLAND_DISPLAY"):
+#     from app.utils.backend import BackendWayland as Backend
+# else:
+from app.utils.backend import BackendX11 as Backend
 
 
 class MagnifierWindow(Gtk.ApplicationWindow):

@@ -114,6 +114,9 @@ class BackendX11:
         self.dpy.flush()
 
 
+# This class provides the low level functions from the Wayland
+# not implemented yet
+
 class BackendWayland:
     def __init__(self):
         self.initialized = False
