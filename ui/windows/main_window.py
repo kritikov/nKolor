@@ -14,6 +14,7 @@ from nKolor.ui.windows.hsl_editor_window import HslEditorWindow
 from nKolor.ui.windows.hsv_editor_window import HsvEditorWindow
 from nKolor.ui.windows.hsv_picker_window import HSVPickerWindow
 from nKolor.ui.windows.about_window import AboutWindow
+from nKolor.resources.resources import Resources
 
 
 class MainWindow(Gtk.ApplicationWindow) : 
@@ -59,7 +60,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         info_btn = Gtk.Button()
         info_btn.add_css_class("info-button")
         info_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
-        info_icon = Gtk.Image.new_from_file("nKolor/resources/icons/info.png")
+        info_icon = Gtk.Image.new_from_file(Resources.icon("info.png"))
         info_btn.set_child(info_icon)
         info_btn.set_tooltip_text("about the nKolor")
         info_btn.connect("clicked", self.open_about_window)
@@ -77,8 +78,8 @@ class MainWindow(Gtk.ApplicationWindow) :
 
         hsv_selector_btn = Gtk.Button()
         hsv_selector_btn.add_css_class("icon-button") 
-        hsv_selector_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
-        hsv_selector_icon = Gtk.Image.new_from_file("nKolor/resources/icons/color-wheel.png")
+        hsv_selector_btn.set_cursor(Gdk.Cursor.new_from_name("pointer")) 
+        hsv_selector_icon = Gtk.Image.new_from_file(Resources.icon("color-wheel.png"))
         hsv_selector_btn.set_child(hsv_selector_icon);
         hsv_selector_btn.set_tooltip_text("select from HSV picker")
         hsv_selector_btn.connect("clicked", self.open_hsv_selector)

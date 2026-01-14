@@ -1,4 +1,5 @@
 from gi.repository import Gtk, Gdk, GObject 
+from nKolor.resources.resources import Resources
 
 class PickButton(Gtk.Frame): 
     __gsignals__ = { 
@@ -16,8 +17,8 @@ class PickButton(Gtk.Frame):
         self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
         self.add_css_class("icon-button") 
 
-        # icon
-        icon = Gtk.Image.new_from_file("nKolor/resources/icons/dropper.png")
+        # icon 
+        icon = Gtk.Image.new_from_file(Resources.icon("dropper.png"))
         icon.set_tooltip_text("prick for screen")
         self.set_child(icon)
 

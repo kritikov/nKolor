@@ -1,4 +1,5 @@
 from gi.repository import Gtk, Gdk, GObject
+from nKolor.resources.resources import Resources
 
 class ColorValueBar(Gtk.Box):
     
@@ -28,12 +29,12 @@ class ColorValueBar(Gtk.Box):
         self.value_entry.set_can_focus(True)        
         self.value_entry.set_hexpand(True)
         self.value_entry.set_text(value)
-        self.value_entry.add_css_class("value-text")
         values_container.append(self.value_entry)
 
         self.copy_btn = Gtk.Button()
-        copy_icon = Gtk.Image.new_from_file("nKolor/resources/icons/copy.png")
-        copy_icon.set_pixel_size(30)
+        self.copy_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+        copy_icon = Gtk.Image.new_from_file(Resources.icon("copy.png"))
+        copy_icon.set_pixel_size(28)
         self.copy_btn.set_child(copy_icon);
         self.copy_btn.set_tooltip_text("copy to clipboard")
         self.copy_btn.connect("clicked", self.copy_to_clipboard)
@@ -41,8 +42,9 @@ class ColorValueBar(Gtk.Box):
 
 
         self.edit_btn = Gtk.Button()
-        edit_icon = Gtk.Image.new_from_file("nKolor/resources/icons/edit.png")
-        edit_icon.set_pixel_size(30)
+        self.edit_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+        edit_icon = Gtk.Image.new_from_file(Resources.icon("edit.png"))
+        edit_icon.set_pixel_size(28)
         self.edit_btn.set_child(edit_icon);
         self.edit_btn.set_tooltip_text("edit the color")
         self.edit_btn.connect("clicked", lambda w: self.emit("edit"))

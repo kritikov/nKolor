@@ -40,7 +40,7 @@ entry:focus-visible {
 }
 .value-bar entry {
     background: whitesmoke;
-    padding: 5px;
+    padding: 2px 5px;
 }
 .value-bar button:hover {
     background: none;
