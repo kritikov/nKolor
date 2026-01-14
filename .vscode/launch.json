@@ -1,0 +1,15 @@
+{
+    // VS code file to run or debug the initial __main__.py from the parent folder
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run nKolor",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "nKolor",
+            "cwd": "${workspaceFolder}/..",
+            "console": "integratedTerminal"
+        }
+
+    ]
+}
