@@ -1,0 +1,74 @@
+/* Γενικό window */
+window {
+    background-color: #e4dffb;
+}
+
+button:focus-visible, 
+scale:focus-visible, 
+.focusable-widget:focus-visible:focus,
+entry:focus-visible {
+  outline: 1px solid rgb(231, 12, 12);
+  outline-offset: 0px;
+}
+
+.window-root-child{
+    margin: 15px;
+}
+
+.icon-button {
+    border: 1px solid #642727;
+    border-radius: 5px;
+    box-shadow: none;
+    padding: 4px;
+    min-width: 50px;
+    min-height: 50px;
+}
+.info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0px;
+    min-width: 25px;
+    min-height: 25px;
+}
+
+.value-bar {
+    padding: 0px;
+}
+.value-bar label {
+    font-weight: bold;
+}
+.value-bar entry {
+    background: whitesmoke;
+    padding: 2px 5px;
+}
+.value-bar button:hover {
+    background: none;
+}
+.value-bar button:active {
+    background: none;
+}
+
+.history_bar{
+    margin: 8px;
+}
+.history_bar box {
+    padding-bottom: 14px;
+}
+
+.magnifier-window{
+    border: 1px solid gray;
+}
+
+.about-title{
+    font-weight: bold;
+    font-size: 2em;
+    color: #260755;
+}
+
+
+
+
+
+
+

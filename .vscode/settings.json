@@ -1,0 +1,8 @@
+{
+    // VS code file to view the imports correctly
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/.."
+    ]
+}
+
