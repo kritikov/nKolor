@@ -15,8 +15,13 @@ System requirements:
 - X11 (for python-xlib)
 
 ![nKolor screen picker](https://github.com/user-attachments/assets/96563fac-7ce9-4816-82d2-7baec76de7ca)
+
 ![nKolor RGB editor](https://github.com/user-attachments/assets/860858ff-bd01-4b87-b389-88004c2308da)
+
 ![nKolor main screen](https://github.com/user-attachments/assets/e6e939cc-ac7f-472b-81e1-c014ab630274)
+
 ![nKolor HSV picker](https://github.com/user-attachments/assets/f9a82893-0c61-4a64-9afd-ef448452851c)
+
 ![nKolor HSL editor](https://github.com/user-attachments/assets/1b56bc8d-1ff9-46c8-a710-ecd18ae03770)
+
 
