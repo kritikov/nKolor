@@ -14,6 +14,9 @@ System requirements:
 - GObject Introspection
 - X11 (for python-xlib)
 
+You can find more informations about the project at https://nkode.gr/EN/articleView?id=277
+
+## screen shots
 ![nKolor screen picker](https://github.com/user-attachments/assets/96563fac-7ce9-4816-82d2-7baec76de7ca)
 
 ![nKolor RGB editor](https://github.com/user-attachments/assets/860858ff-bd01-4b87-b389-88004c2308da)
