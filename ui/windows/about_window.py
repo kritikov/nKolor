@@ -61,8 +61,8 @@ class AboutWindow(Gtk.ApplicationWindow):
 
         # project informations link
         github_link = Gtk.LinkButton.new_with_label(
-            uri="https://github.com/kritikov/nKolor",
-            label="GitHub Repository"
+            uri="https://nkode.gr/EN/articleView?id=277",
+            label="nKolor informations"
         )
         root_child.append(github_link)
 

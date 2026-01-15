@@ -3,14 +3,14 @@ gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk, GObject
 from nKolor.utils.color import Color
 
-class HueSlider(Gtk.Box):
+class HueSlider(Gtk.DrawingArea):
 
     __gsignals__ = {
             "hue_changed": (GObject.SignalFlags.RUN_FIRST, None, (float,)),
         }
  
     def __init__(self, width=30, height=256, initial_hue=0.0):
-        super().__init__(orientation=Gtk.Orientation.HORIZONTAL)
+        super().__init__()
 
         self.hue = initial_hue  # 0..1
         self.height = height
@@ -21,30 +21,28 @@ class HueSlider(Gtk.Box):
     def build_ui(self, width: int, height: int) -> None:
 
          # drawing area with the colors
-        self.colors_area = Gtk.DrawingArea()
-        self.colors_area.set_content_width(width)
-        self.colors_area.set_content_height(height)
-        self.colors_area.set_focusable(True)    
-        self.colors_area.set_can_focus(True)
-        self.colors_area.add_css_class("focusable-widget")
+        self.set_content_width(width)
+        self.set_content_height(height)
+        self.set_focusable(True)    
+        self.set_can_focus(True)
+        self.add_css_class("focusable-widget")
 
-        self.colors_area.set_draw_func(self.draw_colors_area)
-        self.append(self.colors_area)
+        self.set_draw_func(self.draw_colors_area)
 
         # --- Click gesture ---
         click = Gtk.GestureClick()
         click.connect("pressed", self.on_mouse_pressed)
-        self.colors_area.add_controller(click)
+        self.add_controller(click)
 
         # --- Drag gesture ---
         drag = Gtk.GestureDrag()
         drag.connect("drag-update", self.on_drag_update)
-        self.colors_area.add_controller(drag)
+        self.add_controller(drag)
 
         # --- Keyboard gesture ---
         key_controller = Gtk.EventControllerKey()
         key_controller.connect("key-pressed", self.on_key_pressed)
-        self.colors_area.add_controller(key_controller)
+        self.add_controller(key_controller)
 
 
      # drawing function for the colors area
@@ -75,7 +73,7 @@ class HueSlider(Gtk.Box):
 
     # update the hue from the height if the scale
     def update_hue_from_y(self, y: float):
-        height = self.colors_area.get_allocated_height()
+        height = self.get_allocated_height()
         if height <= 0:
             return
         self.set_hue(y / height)
@@ -84,12 +82,12 @@ class HueSlider(Gtk.Box):
     # set the hue from a value
     def set_hue(self, hue: float):
         self.hue = max(0.0, min(1.0, hue))
-        self.colors_area.queue_draw()
+        self.queue_draw()
         self.emit("hue_changed", self.hue)
 
 
     def on_mouse_pressed(self, gesture, n_press, x, y):
-        self.colors_area.grab_focus()
+        self.grab_focus()
         self.update_hue_from_y(y)
 
 

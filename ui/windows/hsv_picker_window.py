@@ -15,7 +15,6 @@ class HSVPickerWindow(Gtk.Window):
     def __init__(self, app: Gtk.ApplicationWindow, color: Color):
         super().__init__(title="HSV Picker")
 
-        self.set_default_size(360, 280)
         self.color = color.copy()
         self.build_ui()
 
@@ -73,7 +72,8 @@ class HSVPickerWindow(Gtk.Window):
     # actions to take when we the hue value is changed from the slider
     def on_hue_changed(self, widget, h:float)->None:
         hue, saturation, value = self.color.hsv
-        self.color.hsv = h, saturation, value
+        hue = h
+        self.color.hsv = hue, saturation, value
         self.hs_selector.set_hue(hue)
         self.color_preview.set_color(self.color)
 
