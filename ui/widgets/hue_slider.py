@@ -1,6 +1,6 @@
 import gi
 gi.require_version("Gtk", "4.0")
-from gi.repository import Gtk, GObject
+from gi.repository import Gtk, Gdk, GObject
 from nKolor.utils.color import Color
 
 class HueSlider(Gtk.Box):
@@ -10,10 +10,10 @@ class HueSlider(Gtk.Box):
         }
  
     def __init__(self, width=30, height=256, initial_hue=0.0):
-        super().__init__(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
+        super().__init__(orientation=Gtk.Orientation.HORIZONTAL)
 
         self.hue = initial_hue  # 0..1
-        self.is_dragging = False
+        self.height = height
 
         self.build_ui(width, height)
        
@@ -24,25 +24,27 @@ class HueSlider(Gtk.Box):
         self.colors_area = Gtk.DrawingArea()
         self.colors_area.set_content_width(width)
         self.colors_area.set_content_height(height)
+        self.colors_area.set_focusable(True)    
+        self.colors_area.set_can_focus(True)
+        self.colors_area.add_css_class("focusable-widget")
+
         self.colors_area.set_draw_func(self.draw_colors_area)
         self.append(self.colors_area)
 
-        # slider to choose color
-        adjustment = Gtk.Adjustment(
-            value=self.hue,
-            lower=0.0,
-            upper=1.0,
-            step_increment=0.001,
-            page_increment=0.01,
-            page_size=0.0,
-        )
-        self.scale = Gtk.Scale(
-            orientation=Gtk.Orientation.VERTICAL,
-            adjustment=adjustment,
-        )
-        self.scale.set_draw_value(False)
-        self.scale.connect("value-changed", self.on_scale_changed)
-        self.append(self.scale)
+        # --- Click gesture ---
+        click = Gtk.GestureClick()
+        click.connect("pressed", self.on_mouse_pressed)
+        self.colors_area.add_controller(click)
+
+        # --- Drag gesture ---
+        drag = Gtk.GestureDrag()
+        drag.connect("drag-update", self.on_drag_update)
+        self.colors_area.add_controller(drag)
+
+        # --- Keyboard gesture ---
+        key_controller = Gtk.EventControllerKey()
+        key_controller.connect("key-pressed", self.on_key_pressed)
+        self.colors_area.add_controller(key_controller)
 
 
      # drawing function for the colors area
@@ -53,6 +55,7 @@ class HueSlider(Gtk.Box):
             cr.set_source_rgb(r, g, b)
             cr.rectangle(0, y, width, 1)
             cr.fill()
+
         self.draw_pointer(cr, width, height)
 
 
@@ -70,10 +73,54 @@ class HueSlider(Gtk.Box):
         cr.fill()
 
 
-    # slider event 
-    def on_scale_changed(self, scale)-> None:
-        self.hue = scale.get_value()
+    # update the hue from the height if the scale
+    def update_hue_from_y(self, y: float):
+        height = self.colors_area.get_allocated_height()
+        if height <= 0:
+            return
+        self.set_hue(y / height)
+
+
+    # set the hue from a value
+    def set_hue(self, hue: float):
+        self.hue = max(0.0, min(1.0, hue))
         self.colors_area.queue_draw()
         self.emit("hue_changed", self.hue)
 
 
+    def on_mouse_pressed(self, gesture, n_press, x, y):
+        self.colors_area.grab_focus()
+        self.update_hue_from_y(y)
+
+
+    def on_drag_update(self, gesture, dx, dy):
+        success, x, y = gesture.get_point()
+        if not success:
+            return
+        self.update_hue_from_y(y)
+
+
+    def on_key_pressed(self, controller, keyval, keycode, state):
+        small_step = 0.005 
+        page_step = 0.05
+
+        if keyval == Gdk.KEY_Up:
+            self.set_hue(self.hue - small_step)
+            return True
+
+        if keyval == Gdk.KEY_Down:
+            self.set_hue(self.hue + small_step)
+            return True
+
+        if keyval == Gdk.KEY_Page_Up:
+            self.set_hue(self.hue - page_step)
+            return True
+
+        if keyval == Gdk.KEY_Page_Down:
+            self.set_hue(self.hue + page_step)
+            return True
+
+        return False
+
+
+    

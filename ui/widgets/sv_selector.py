@@ -33,6 +33,7 @@ class SVSelector(Gtk.Overlay):
         self.colors_area.set_content_height(self.height)
         self.colors_area.set_draw_func(self.on_draw)
         self.colors_area.set_focusable(True)
+        self.colors_area.set_can_focus(True)
         self.colors_area.add_css_class("focusable-widget")
         self.set_child(self.colors_area)
         key_controller = Gtk.EventControllerKey()
