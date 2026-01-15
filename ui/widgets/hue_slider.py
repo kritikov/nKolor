@@ -2,7 +2,6 @@ import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, GObject
 from nKolor.utils.color import Color
-import colorsys, cairo
 
 class HueSlider(Gtk.Box):
 

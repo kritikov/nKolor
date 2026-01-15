@@ -5,8 +5,6 @@ from nKolor.utils.color import Color
 from nKolor.ui.widgets.sv_selector import SVSelector
 from nKolor.ui.widgets.hue_slider import HueSlider
 from nKolor.ui.widgets.color_view import ColorView, ColorViewType
-import colorsys, cairo
-
 
 class HSVPickerWindow(Gtk.Window):
 
