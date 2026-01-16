@@ -16,6 +16,8 @@ System requirements:
 
 You can find more informations about the project at https://nkode.gr/EN/articleView?id=277
 
+youtube: https://youtu.be/W6OPW4cBMwg
+
 ## screen shots
 ![nKolor screen picker](https://github.com/user-attachments/assets/96563fac-7ce9-4816-82d2-7baec76de7ca)
 
