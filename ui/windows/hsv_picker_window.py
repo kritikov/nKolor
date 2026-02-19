@@ -1,10 +1,10 @@
 import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk, GObject
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.sv_selector import SVSelector
-from nKolor.ui.widgets.hue_slider import HueSlider
-from nKolor.ui.widgets.color_view import ColorView, ColorViewType
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.sv_selector import SVSelector
+from nkolor.ui.widgets.hue_slider import HueSlider
+from nkolor.ui.widgets.color_view import ColorView, ColorViewType
 
 class HSVPickerWindow(Gtk.Window):
 

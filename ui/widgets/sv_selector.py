@@ -1,8 +1,8 @@
 import gi
 gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, Gdk, GObject
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.crosshair import Crosshair
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.crosshair import Crosshair
 import cairo
 
 class SVSelector(Gtk.Overlay):

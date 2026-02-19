@@ -1,5 +1,5 @@
 from gi.repository import Gtk, Gdk, GObject
-from nKolor.resources.resources import Resources
+from nkolor.resources.resources import Resources
 
 class ColorValueBar(Gtk.Box):
     

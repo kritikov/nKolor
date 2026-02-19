@@ -1,5 +1,5 @@
 from gi.repository import Gtk, Gdk, GObject
-from nKolor.utils.color import Color
+from nkolor.utils.color import Color
 import math
 from enum import Enum
 

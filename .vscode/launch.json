@@ -6,7 +6,7 @@
             "name": "Run nKolor",
             "type": "debugpy",
             "request": "launch",
-            "module": "nKolor",
+            "module": "nkolor",
             "cwd": "${workspaceFolder}/..",
             "console": "integratedTerminal"
         }

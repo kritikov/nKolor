@@ -1,8 +1,8 @@
 from gi.repository import Gtk, Gdk, GObject
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.color_view import ColorView, ColorViewType
-from nKolor.ui.widgets.slider_editor import SliderEditor
-from nKolor.ui.widgets.slider_editor import SliderEditorFormat
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.color_view import ColorView, ColorViewType
+from nkolor.ui.widgets.slider_editor import SliderEditor
+from nkolor.ui.widgets.slider_editor import SliderEditorFormat
 
 
 class HexEditorWindow(Gtk.ApplicationWindow):

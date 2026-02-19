@@ -3,14 +3,14 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 
 from gi.repository import Gtk, Gdk, GLib
-from nKolor.ui.widgets.crosshair import Crosshair
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.color_view import ColorView, ColorViewType
+from nkolor.ui.widgets.crosshair import Crosshair
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.color_view import ColorView, ColorViewType
 
 # if os.environ.get("WAYLAND_DISPLAY"):
 #     from app.utils.backend import BackendWayland as Backend
 # else:
-from nKolor.utils.backend import BackendX11 as Backend
+from nkolor.utils.backend import BackendX11 as Backend
 
 
 class MagnifierWindow(Gtk.ApplicationWindow):

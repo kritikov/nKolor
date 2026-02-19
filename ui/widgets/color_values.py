@@ -1,6 +1,6 @@
 from gi.repository import Gtk, GObject
-from nKolor.ui.widgets.color_value_bar import ColorValueBar
-from nKolor.utils.color import Color
+from nkolor.ui.widgets.color_value_bar import ColorValueBar
+from nkolor.utils.color import Color
 
 class ColorValues(Gtk.Box):
     

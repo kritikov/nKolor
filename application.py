@@ -1,6 +1,6 @@
 from gi.repository import Gtk, Gdk
-from nKolor.ui.windows.main_window import MainWindow
-from nKolor.resources.resources import Resources
+from nkolor.ui.windows.main_window import MainWindow
+from nkolor.resources.resources import Resources
 
 class ColorPickerApp(Gtk.Application):
 

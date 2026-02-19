@@ -2,19 +2,19 @@ import gi
 gi.require_version("Gtk", "4.0")
 
 from gi.repository import Gtk, Gdk, Gio
-from nKolor.ui.widgets.history_bar import HistoryBar
-from nKolor.ui.widgets.pick_button import PickButton
-from nKolor.ui.widgets.color_preview import ColorPreview
-from nKolor.ui.widgets.color_values import ColorValues
-from nKolor.utils.color import Color
-from nKolor.ui.windows.magnifier_window import MagnifierWindow
-from nKolor.ui.windows.hex_editor_window import HexEditorWindow
-from nKolor.ui.windows.rgb_editor_window import RgbEditorWindow
-from nKolor.ui.windows.hsl_editor_window import HslEditorWindow
-from nKolor.ui.windows.hsv_editor_window import HsvEditorWindow
-from nKolor.ui.windows.hsv_picker_window import HSVPickerWindow
-from nKolor.ui.windows.about_window import AboutWindow
-from nKolor.resources.resources import Resources
+from nkolor.ui.widgets.history_bar import HistoryBar
+from nkolor.ui.widgets.pick_button import PickButton
+from nkolor.ui.widgets.color_preview import ColorPreview
+from nkolor.ui.widgets.color_values import ColorValues
+from nkolor.utils.color import Color
+from nkolor.ui.windows.magnifier_window import MagnifierWindow
+from nkolor.ui.windows.hex_editor_window import HexEditorWindow
+from nkolor.ui.windows.rgb_editor_window import RgbEditorWindow
+from nkolor.ui.windows.hsl_editor_window import HslEditorWindow
+from nkolor.ui.windows.hsv_editor_window import HsvEditorWindow
+from nkolor.ui.windows.hsv_picker_window import HSVPickerWindow
+from nkolor.ui.windows.about_window import AboutWindow
+from nkolor.resources.resources import Resources
 
 
 class MainWindow(Gtk.ApplicationWindow) : 

@@ -3,9 +3,9 @@ gi.require_version("Gtk", "4.0")
 from gi.repository import Gtk, GObject
 
 from collections import deque
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.color_view import ColorView
-from nKolor.ui.widgets.color_view import ColorViewType
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.color_view import ColorView
+from nkolor.ui.widgets.color_view import ColorViewType
 
 class HistoryBar(Gtk.ScrolledWindow):
     

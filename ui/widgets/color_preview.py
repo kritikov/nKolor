@@ -1,7 +1,7 @@
 from gi.repository import Gtk, GObject
-from nKolor.utils.color import Color
-from nKolor.ui.widgets.color_view import ColorView
-from nKolor.ui.widgets.color_view import ColorViewType
+from nkolor.utils.color import Color
+from nkolor.ui.widgets.color_view import ColorView
+from nkolor.ui.widgets.color_view import ColorViewType
 
 
 class ColorPreview(Gtk.Box):
