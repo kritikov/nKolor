@@ -14,7 +14,7 @@ System requirements:
 - GObject Introspection
 - X11 (for python-xlib)
 
-You can find more informations about the project at https://nkode.gr/EN/articleView?id=277
+You can find more informations about the project at [https://nkode.gr/EN/articleView?id=277](https://nkode.gr/EN/articles/277/nkolor-linux-color-picker-gtk4)
 
 youtube: https://youtu.be/W6OPW4cBMwg
 
