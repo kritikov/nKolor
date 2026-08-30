@@ -10,16 +10,15 @@ class ColorPreview(Gtk.Box):
             "similar_color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         }
 
-    def __init__(self):
+    def __init__(self, preview_size: int = 80, similar_size: int = 20) -> None:
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
         self.color = Color()
-        self.set_size_request(100, -1)
-        self.build_ui()
+        self.build_ui(preview_size, similar_size)
 
 
-    def build_ui(self)-> None:
-        self.preview = ColorView(80, 80, self.color, ColorViewType.SQUARE, False)
+    def build_ui(self, preview_size: int, similar_size: int)-> None:
+        self.preview = ColorView(preview_size, preview_size, self.color, ColorViewType.SQUARE, False)
         self.append(self.preview)
 
         similar_colors = Gtk.Box(
@@ -29,27 +28,27 @@ class ColorPreview(Gtk.Box):
         similar_colors.set_halign(Gtk.Align.CENTER)
         similar_colors.set_valign(Gtk.Align.CENTER)
 
-        self.similar_color_1 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        self.similar_color_1 = ColorView(similar_size, similar_size, self.color, ColorViewType.SQUARE)
         self.similar_color_1.connect("clicked", self.on_similar_color_select)
         self.similar_color_1.set_tooltip_text("lighter")
         similar_colors.append(self.similar_color_1)
 
-        self.similar_color_2 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        self.similar_color_2 = ColorView(similar_size, similar_size, self.color, ColorViewType.SQUARE)
         self.similar_color_2.connect("clicked", self.on_similar_color_select)
         self.similar_color_2.set_tooltip_text("darker")
         similar_colors.append(self.similar_color_2)
 
-        self.similar_color_3 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        self.similar_color_3 = ColorView(similar_size, similar_size, self.color, ColorViewType.SQUARE)
         self.similar_color_3.connect("clicked", self.on_similar_color_select)
         self.similar_color_3.set_tooltip_text("less saturated")
         similar_colors.append(self.similar_color_3)
 
-        self.similar_color_4 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        self.similar_color_4 = ColorView(similar_size, similar_size, self.color, ColorViewType.SQUARE)
         self.similar_color_4.connect("clicked", self.on_similar_color_select)
         self.similar_color_4.set_tooltip_text("more saturated")
         similar_colors.append(self.similar_color_4)
 
-        # self.similar_color_5 = ColorView(20, 20, self.color, ColorViewType.SQUARE)
+        # self.similar_color_5 = ColorView(similar_size, similar_size, self.color, ColorViewType.SQUARE)
         # self.similar_color_5.connect("clicked", self.on_similar_color_select)
         # self.similar_color_5.set_tooltip_text("complementary")
         # similar_colors.append(self.similar_color_5)

@@ -11,20 +11,20 @@ class ColorValues(Gtk.Box):
         "edit_hsv": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
 
-    def __init__(self):
+    def __init__(self, button_size: int = 28):
         super().__init__(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         
         self.set_hexpand(True)
-        self.hex_bar = ColorValueBar("HEX", "")
+        self.hex_bar = ColorValueBar("HEX", "", button_size)
         self.hex_bar.connect("edit", lambda w: self.emit("edit_hex"))
 
-        self.rgb_bar = ColorValueBar("RGB", "")
+        self.rgb_bar = ColorValueBar("RGB", "", button_size)
         self.rgb_bar.connect("edit", lambda w: self.emit("edit_rgb"))
 
-        self.hsl_bar = ColorValueBar("HSL", "")
+        self.hsl_bar = ColorValueBar("HSL", "", button_size)
         self.hsl_bar.connect("edit", lambda w: self.emit("edit_hsl"))
 
-        self.hsv_bar = ColorValueBar("HSV", "")
+        self.hsv_bar = ColorValueBar("HSV", "", button_size)
         self.hsv_bar.connect("edit", lambda w: self.emit("edit_hsv"))
 
         self.append(self.hex_bar)

@@ -8,6 +8,7 @@ window {
 
 .window-root-child {
     margin: 10px; 
+    font-size: 16px;
 }
 
 button:focus-visible, 
@@ -50,12 +51,16 @@ entry:focus-visible {
 2. COMPACT LAYOUT (small screens)
 ================================---------- */
 
+window.compact-screen .window-root-child {
+    font-size: 16px;
+}
+
 window.compact-screen .icon-button {
     border: 1px solid #642727;
     border-radius: 5px;
-    padding: 4px;
-    min-width: 50px;
-    min-height: 50px;
+    padding: 3px;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 window.compact-screen .info-button {
@@ -81,8 +86,10 @@ window.compact-screen .history_bar {
 3. LARGE LAYOUT (big screens)
 ================================---------- */
 
-/* Στο PC θέλουμε τα κουμπιά να μην δείχνουν τεράστια και χοντροκομμένα, 
-   οπότε τους βάζουμε πιο μαζεμένα min-width/min-height ή μικρότερο padding */
+window.large-screen .window-root-child {
+    font-size: 16px;
+}
+
 window.large-screen .icon-button {
     border: 1px solid #642727;
     border-radius: 5px;

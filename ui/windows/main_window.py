@@ -28,8 +28,8 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.current_color = Color(50, 180, 150) # initial color
         self.magnifier = MagnifierWindow()
 
-        self.screen_width = self.setup_screen_layout()
-        self.build_ui()
+        self.layout = self.setup_screen_layout()
+        self.build_ui(self.layout)
 
         # Key controller για ESC
         key_controller = Gtk.EventControllerKey()
@@ -37,7 +37,21 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.add_controller(key_controller)
 
 
-    def build_ui(self) -> None:
+    def build_ui(self, layout: ScreenSize) -> None:
+
+        if layout == ScreenSize.LARGE:
+            self.add_css_class("large-screen")
+            self.set_default_size(350, 180)
+            preview_size = 50
+            similar_size = 20
+            values_button_size = 28
+        else:
+            self.add_css_class("compact-screen")
+            #self.set_default_size(420, 420)
+            preview_size = 70
+            similar_size = 20
+            values_button_size = 25
+        
         root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)  
@@ -47,7 +61,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         second_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=30)
         third_row = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         left_col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=20)
-        right_col = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=12)
+        right_col = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=5)
         second_row.append(left_col)
         second_row.append(right_col)
         root_child.append(first_row)
@@ -68,7 +82,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         first_row.append(info_btn)
 
         # elements
-        left_col_buttons = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        left_col_buttons = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         left_col.append(left_col_buttons)
 
         pick_button = PickButton()
@@ -86,13 +100,12 @@ class MainWindow(Gtk.ApplicationWindow) :
         hsv_selector_btn.connect("clicked", self.open_hsv_selector)
         left_col_buttons.append(hsv_selector_btn)
 
-        self.color_preview = ColorPreview()
-        self.color_preview.set_size_request(100, -1)
+        self.color_preview = ColorPreview(preview_size, similar_size)
         self.color_preview.connect("similar_color_selected", self.on_similar_color_selected)
         self.color_preview.set_color(self.current_color)
         left_col.append(self.color_preview)
         
-        self.color_values = ColorValues()
+        self.color_values = ColorValues(values_button_size)
         self.color_values.connect("edit_hex", self.on_edit_hex)
         self.color_values.connect("edit_rgb", self.on_edit_rgb)
         self.color_values.connect("edit_hsl", self.on_edit_hsl)
@@ -230,23 +243,13 @@ class MainWindow(Gtk.ApplicationWindow) :
         if display:
             monitor = display.get_monitors().get_item(0)
             if monitor:
-                # Παίρνουμε το φυσικό πλάτος της οθόνης σε χιλιοστά (mm)
                 width_mm = monitor.get_width_mm()
-                
-                # Ένα laptop 15"-17" είναι συνήθως κάτω από 400mm σε πλάτος. 
-                # Ένα desktop monitor είναι συνήθως > 450mm-500mm.
                 if width_mm > 450:
-                    self.add_css_class("large-screen")
-                    self.set_default_size(350, 180)
                     return ScreenSize.LARGE
                 else:
-                    self.add_css_class("compact-screen")
-                    self.set_default_size(520, 220)
                     return ScreenSize.SMALL
 
         # Fallback
-        self.add_css_class("compact-screen")
-        self.set_default_size(520, 220)
         return ScreenSize.SMALL
 
     
