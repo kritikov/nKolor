@@ -230,10 +230,12 @@ class MainWindow(Gtk.ApplicationWindow) :
         if display:
             monitor = display.get_monitors().get_item(0)
             if monitor:
-                geometry = monitor.get_geometry()
-                screen_width = geometry.width
+                # Παίρνουμε το φυσικό πλάτος της οθόνης σε χιλιοστά (mm)
+                width_mm = monitor.get_width_mm()
                 
-                if screen_width > 1366:
+                # Ένα laptop 15"-17" είναι συνήθως κάτω από 400mm σε πλάτος. 
+                # Ένα desktop monitor είναι συνήθως > 450mm-500mm.
+                if width_mm > 450:
                     self.add_css_class("large-screen")
                     self.set_default_size(350, 180)
                     return ScreenSize.LARGE
@@ -246,5 +248,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.add_css_class("compact-screen")
         self.set_default_size(520, 220)
         return ScreenSize.SMALL
+
+    
 
     
