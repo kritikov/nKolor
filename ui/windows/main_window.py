@@ -15,6 +15,7 @@ from nkolor.ui.windows.hsv_editor_window import HsvEditorWindow
 from nkolor.ui.windows.hsv_picker_window import HSVPickerWindow
 from nkolor.ui.windows.about_window import AboutWindow
 from nkolor.resources.resources import Resources
+from nkolor.utils.screen_size_enum import ScreenSize
 
 
 class MainWindow(Gtk.ApplicationWindow) : 
@@ -23,11 +24,11 @@ class MainWindow(Gtk.ApplicationWindow) :
         super().__init__(application=app)
         
         self.set_title("nKolor")
-        self.set_default_size(520, 220)
         self.set_resizable(False) 
         self.current_color = Color(50, 180, 150) # initial color
         self.magnifier = MagnifierWindow()
 
+        self.screen_width = self.setup_screen_layout()
         self.build_ui()
 
         # Key controller για ESC
@@ -223,3 +224,27 @@ class MainWindow(Gtk.ApplicationWindow) :
             self.close()
             return True
         return False
+
+    def setup_screen_layout(self) -> ScreenSize:
+        display = Gdk.Display.get_default()
+        if display:
+            monitor = display.get_monitors().get_item(0)
+            if monitor:
+                geometry = monitor.get_geometry()
+                screen_width = geometry.width
+                
+                if screen_width > 1366:
+                    self.add_css_class("large-screen")
+                    self.set_default_size(350, 180)
+                    return ScreenSize.LARGE
+                else:
+                    self.add_css_class("compact-screen")
+                    self.set_default_size(520, 220)
+                    return ScreenSize.SMALL
+
+        # Fallback
+        self.add_css_class("compact-screen")
+        self.set_default_size(520, 220)
+        return ScreenSize.SMALL
+
+    

@@ -1,6 +1,13 @@
-/* Γενικό window */
+/* ==========================================
+1. GENERAL INSTRUCTIONS (works for all screens)
+================================---------- */
+
 window {
     background-color: #e4dffb;
+}
+
+.window-root-child {
+    margin: 10px; 
 }
 
 button:focus-visible, 
@@ -9,51 +16,6 @@ scale:focus-visible,
 entry:focus-visible {
   outline: 1px solid rgb(231, 12, 12);
   outline-offset: 0px;
-}
-
-.window-root-child{
-    margin: 15px;
-}
-
-.icon-button {
-    border: 1px solid #642727;
-    border-radius: 5px;
-    box-shadow: none;
-    padding: 4px;
-    min-width: 50px;
-    min-height: 50px;
-}
-.info-button {
-    border: none;
-    background: none;
-    box-shadow: none;
-    padding: 0px;
-    min-width: 25px;
-    min-height: 25px;
-}
-
-.value-bar {
-    padding: 0px;
-}
-.value-bar label {
-    font-weight: bold;
-}
-.value-bar entry {
-    background: whitesmoke;
-    padding: 2px 5px;
-}
-.value-bar button:hover {
-    background: none;
-}
-.value-bar button:active {
-    background: none;
-}
-
-.history_bar{
-    margin: 8px;
-}
-.history_bar box {
-    padding-bottom: 14px;
 }
 
 .magnifier-window{
@@ -65,6 +27,95 @@ entry:focus-visible {
     font-size: 2em;
     color: #260755;
 }
+
+.value-bar {
+    padding: 0px;
+}
+.value-bar label {
+    font-weight: bold;
+}
+
+.value-bar button:hover {
+    background: none;
+}
+.value-bar button:active {
+    background: none;
+}
+.history_bar box {
+    padding-bottom: 14px;
+}
+
+
+/* ==========================================
+2. COMPACT LAYOUT (small screens)
+================================---------- */
+
+window.compact-screen .icon-button {
+    border: 1px solid #642727;
+    border-radius: 5px;
+    padding: 4px;
+    min-width: 50px;
+    min-height: 50px;
+}
+
+window.compact-screen .info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0px;
+    min-width: 25px;
+    min-height: 25px;
+}
+
+window.compact-screen .value-bar entry {
+    background: whitesmoke;
+    padding: 2px 5px;
+}
+
+window.compact-screen .history_bar {
+    margin: 8px;
+}
+
+
+/* ==========================================
+3. LARGE LAYOUT (big screens)
+================================---------- */
+
+/* Στο PC θέλουμε τα κουμπιά να μην δείχνουν τεράστια και χοντροκομμένα, 
+   οπότε τους βάζουμε πιο μαζεμένα min-width/min-height ή μικρότερο padding */
+window.large-screen .icon-button {
+    border: 1px solid #642727;
+    border-radius: 5px;
+    padding: 3px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+window.large-screen .info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
+    padding: 0px;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+window.large-screen .value-bar entry {
+    background: whitesmoke;
+    padding: 1px 3px;
+}
+
+window.large-screen .history_bar {
+    margin: 0px;
+}
+
+
+
+
+
+
+
+
 
 
 
