@@ -32,6 +32,7 @@ class ColorValueBar(Gtk.Box):
 
         self.copy_btn = Gtk.Button()
         self.copy_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+        self.copy_btn.add_css_class("color-values-button")
         copy_icon = Gtk.Image.new_from_file(Resources.icon("copy.png"))
         copy_icon.set_pixel_size(button_size)
         self.copy_btn.set_child(copy_icon);
@@ -42,6 +43,7 @@ class ColorValueBar(Gtk.Box):
 
         self.edit_btn = Gtk.Button()
         self.edit_btn.set_cursor(Gdk.Cursor.new_from_name("pointer"))
+        self.edit_btn.add_css_class("color-values-button")
         edit_icon = Gtk.Image.new_from_file(Resources.icon("edit.png"))
         edit_icon.set_pixel_size(button_size)
         self.edit_btn.set_child(edit_icon);

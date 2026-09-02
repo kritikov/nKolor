@@ -5,6 +5,7 @@ from nkolor.utils.color import Color
 from nkolor.ui.widgets.sv_selector import SVSelector
 from nkolor.ui.widgets.hue_slider import HueSlider
 from nkolor.ui.widgets.color_view import ColorView, ColorViewType
+from nkolor.utils.screen_size_enum import ScreenSize
 
 class HSVPickerWindow(Gtk.Window):
 
@@ -12,18 +13,24 @@ class HSVPickerWindow(Gtk.Window):
         "color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
     }
 
-    def __init__(self, app: Gtk.ApplicationWindow, color: Color):
+    def __init__(self, app: Gtk.ApplicationWindow, color: Color, layout: ScreenSize):
         super().__init__(title="HSV Picker")
 
         self.color = color.copy()
-        self.build_ui()
+        self.build_ui(layout)
 
         # Key controller για ESC
         key_controller = Gtk.EventControllerKey()
         key_controller.connect("key-pressed", self.on_key_pressed)
         self.add_controller(key_controller)
 
-    def build_ui(self) -> None:
+    def build_ui(self, layout: ScreenSize) -> None:
+
+        if layout == ScreenSize.LARGE:
+            self.add_css_class("large-screen")
+        else:
+            self.add_css_class("compact-screen")
+
         root_child = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)

@@ -41,16 +41,19 @@ class MainWindow(Gtk.ApplicationWindow) :
 
         if layout == ScreenSize.LARGE:
             self.add_css_class("large-screen")
-            self.set_default_size(350, 180)
-            preview_size = 50
-            similar_size = 20
-            values_button_size = 28
+            self.set_default_size(370, 180)
+            preview_size = 45
+            similar_size = 18
+            values_button_size = 22
+            history_colors_size = 20
+            history_spacing = 4
         else:
             self.add_css_class("compact-screen")
-            #self.set_default_size(420, 420)
             preview_size = 70
             similar_size = 20
             values_button_size = 25
+            history_colors_size = 28
+            history_spacing = 8
         
         root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)
         root_child.add_css_class("window-root-child")
@@ -113,7 +116,7 @@ class MainWindow(Gtk.ApplicationWindow) :
         self.color_values.set_color(self.current_color)
         right_col.append(self.color_values)
 
-        self.history_bar = HistoryBar()
+        self.history_bar = HistoryBar(size=history_colors_size, spacing=history_spacing)
         self.history_bar.connect("color-selected", self.on_history_color_selected)
         third_row.append(self.history_bar)
 
@@ -186,22 +189,22 @@ class MainWindow(Gtk.ApplicationWindow) :
 
     # open the hex editor to edit the color
     def on_edit_hex(self, widget) -> None:
-        win = HexEditorWindow(self.get_application(), self.current_color)
+        win = HexEditorWindow(self.get_application(), self.current_color, self.layout)
         self.open_color_editor(win)
 
     # open the rgb editor to edit the color
     def on_edit_rgb(self, widget) -> None:
-        win = RgbEditorWindow(self.get_application(), self.current_color)
+        win = RgbEditorWindow(self.get_application(), self.current_color, self.layout)
         self.open_color_editor(win)
 
     # open the hsl editor to edit the color
     def on_edit_hsl(self, widget) -> None:
-        win = HslEditorWindow(self.get_application(), self.current_color)
+        win = HslEditorWindow(self.get_application(), self.current_color, self.layout)
         self.open_color_editor(win)
 
     # open the hsv editor to edit the color
     def on_edit_hsv(self, widget) -> None:
-        win = HsvEditorWindow(self.get_application(), self.current_color)
+        win = HsvEditorWindow(self.get_application(), self.current_color, self.layout)
         self.open_color_editor(win)
 
 
@@ -216,7 +219,7 @@ class MainWindow(Gtk.ApplicationWindow) :
 
     # open the hsv color picker
     def open_hsv_selector(self, widget) -> None:
-        win = HSVPickerWindow(self.get_application(), self.current_color)
+        win = HSVPickerWindow(self.get_application(), self.current_color, self.layout)
         win.connect("color_selected", self.on_color_edited)
         win.set_transient_for(self)
         win.set_modal(True)

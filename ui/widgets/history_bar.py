@@ -19,9 +19,11 @@ class HistoryBar(Gtk.ScrolledWindow):
         return last_color
 
 
-    def __init__(self):
+    def __init__(self, size: int = 28, spacing: int = 8):
         super().__init__()
 
+        self.size: int = size
+        self.spacing: int = spacing
         self.max_colors: int = 100
         self.colors: deque[Color] = deque(maxlen=self.max_colors)
         self.set_hexpand(True)
@@ -35,7 +37,7 @@ class HistoryBar(Gtk.ScrolledWindow):
     def build_ui(self)-> None:
         self.colors_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
-            spacing=8
+            spacing=self.spacing
         )
         self.set_child(self.colors_box)
 
@@ -58,7 +60,7 @@ class HistoryBar(Gtk.ScrolledWindow):
 
     # add a widget in the history based on a color
     def add_color_widget(self, color:Color)-> None:
-        circle = ColorView(28, 28, color, ColorViewType.CIRCLE)
+        circle = ColorView(self.size, self.size, color, ColorViewType.CIRCLE)
         circle.connect("clicked", self.on_color_select)
         self.colors_box.prepend(circle)
 

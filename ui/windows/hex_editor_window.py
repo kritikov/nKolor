@@ -3,7 +3,7 @@ from nkolor.utils.color import Color
 from nkolor.ui.widgets.color_view import ColorView, ColorViewType
 from nkolor.ui.widgets.slider_editor import SliderEditor
 from nkolor.ui.widgets.slider_editor import SliderEditorFormat
-
+from nkolor.utils.screen_size_enum import ScreenSize
 
 class HexEditorWindow(Gtk.ApplicationWindow):
 
@@ -11,12 +11,12 @@ class HexEditorWindow(Gtk.ApplicationWindow):
             "color_selected": (GObject.SignalFlags.RUN_FIRST, None, (object,)),
         }
 
-    def __init__(self, app: Gtk.Application, color: Color):
+    def __init__(self, app: Gtk.Application, color: Color, layout: ScreenSize):
         super().__init__(application=app, title="HEX editor")
 
         self.set_resizable(False) 
         self.color = color.copy()
-        self.build_ui()
+        self.build_ui(layout)
 
         # Key controller για ESC
         key_controller = Gtk.EventControllerKey()
@@ -24,7 +24,13 @@ class HexEditorWindow(Gtk.ApplicationWindow):
         self.add_controller(key_controller)
 
 
-    def build_ui(self)->None:
+    def build_ui(self, layout: ScreenSize)->None:
+
+        if layout == ScreenSize.LARGE:
+            self.add_css_class("large-screen")
+        else:
+            self.add_css_class("compact-screen")
+
         root_child = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         root_child.add_css_class("window-root-child")
         self.set_child(root_child)
