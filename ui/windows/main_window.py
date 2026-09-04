@@ -52,7 +52,7 @@ class MainWindow(Gtk.ApplicationWindow) :
             preview_size = 70
             similar_size = 20
             values_button_size = 25
-            history_colors_size = 28
+            history_colors_size = 25
             history_spacing = 8
         
         root_child = Gtk.Box(orientation = Gtk.Orientation.VERTICAL, spacing=10)

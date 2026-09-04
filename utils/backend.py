@@ -37,8 +37,8 @@ class BackendX11:
 
    # get the position of the mouse
     def get_mouse_position(self) -> Tuple[int, int]:
-        data = self.root.query_pointer()._data
-        return data["root_x"], data["root_y"]
+        pointer = self.root.query_pointer()
+        return pointer.root_x, pointer.root_y
     
 
     # move the window

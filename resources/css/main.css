@@ -9,19 +9,10 @@ window {
 .window-root-child {
     margin: 10px; 
     font-size: 16px;
-}
 
-.icon-button {
-    border: 1px solid #642727;
-    border-radius: 5px;
+    max-width: 300px;
+    max-height: 400px;
 }
-
-.info-button {
-    border: none;
-    background: none;
-    box-shadow: none;
-}
-
 
 button:focus-visible, 
 scale:focus-visible, 
@@ -47,9 +38,6 @@ entry:focus-visible {
 .value-bar label {
     font-weight: bold;
 }
-.value-bar entry {
-    background: whitesmoke;
-}
 
 .value-bar button:hover {
     background: none;
@@ -71,18 +59,24 @@ window.compact-screen .window-root-child {
 }
 
 window.compact-screen .icon-button {
+    border: 1px solid #642727;
+    border-radius: 5px;
     padding: 3px;
     min-width: 40px;
     min-height: 40px;
 }
 
 window.compact-screen .info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
     padding: 0px;
     min-width: 25px;
     min-height: 25px;
 }
 
 window.compact-screen .value-bar entry {
+    background: whitesmoke;
     padding: 2px 5px;
 }
 
@@ -96,32 +90,33 @@ window.compact-screen .history_bar {
 ================================---------- */
 
 window.large-screen .window-root-child {
-    font-size: 13px;
+    font-size: 16px;
 }
 
 window.large-screen .icon-button {
+    border: 1px solid #642727;
+    border-radius: 5px;
     padding: 3px;
     min-width: 30px;
     min-height: 30px;
 }
 
 window.large-screen .info-button {
+    border: none;
+    background: none;
+    box-shadow: none;
     padding: 0px;
     min-width: 20px;
     min-height: 20px;
 }
 
-window.large-screen .color-values-button {
-    padding: 3px;
-}
-
 window.large-screen .value-bar entry {
+    background: whitesmoke;
     padding: 1px 3px;
 }
 
 window.large-screen .history_bar {
     margin: 0px;
-    padding-top: 5px;
 }
 
 
