@@ -9,9 +9,6 @@ window {
 .window-root-child {
     margin: 10px; 
     font-size: 16px;
-
-    max-width: 300px;
-    max-height: 400px;
 }
 
 button:focus-visible, 
