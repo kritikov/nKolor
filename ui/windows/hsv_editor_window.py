@@ -14,7 +14,7 @@ class HsvEditorWindow(Gtk.ApplicationWindow):
     def __init__(self, app: Gtk.Application, color: Color, layout: ScreenSize):
         super().__init__(application=app, title="HSV editor")
 
-        self.set_resizable(False) 
+        #self.set_resizable(False) 
         self.color = color.copy()
         self.build_ui(layout)
 

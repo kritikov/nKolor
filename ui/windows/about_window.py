@@ -6,7 +6,8 @@ class AboutWindow(Gtk.ApplicationWindow):
 
     def __init__(self, app: Gtk.Application):
         super().__init__(title="about")
-        self.set_resizable(False)
+
+        #self.set_resizable(False)
         self.set_default_size(450, -1)
 
 

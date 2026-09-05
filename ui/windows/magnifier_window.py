@@ -27,7 +27,7 @@ class MagnifierWindow(Gtk.ApplicationWindow):
         self.set_decorated(False)
         self.set_resizable(False)
         self.set_focusable(False)
-        self.set_opacity(0.95)
+        self.set_opacity(0.0)
 
         self.size = int(self.capture_size * self.magnification)
         self.set_default_size(self.size, self.size)
@@ -67,16 +67,23 @@ class MagnifierWindow(Gtk.ApplicationWindow):
             return
 
         self.running = True
+        self.set_opacity(0.0)
         self.show()
         self.backend.bind_window(self)
         self.backend.set_window_on_top()
 
         GLib.timeout_add(16, self.tick)
+        GLib.timeout_add(150, self.display)
 
+    # added a small delay before displaying the window to avoid flickering
+    def display(self):
+        self.set_opacity(0.95)
+        return False
 
     # close the window and stop scanning the surface of the screen
     def stop(self):
         self.running = False
+        self.set_opacity(0.0)
         self.hide()
 
 
